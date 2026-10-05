@@ -1,0 +1,4263 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="crispEdges">
+  <rect width="64" height="64" rx="8" fill="#0b0d17"/>
+  <path d="M14 45h36v7H14zM18 12h8v32h-8zM38 12h8v32h-8zM26 20h12v7H26zM26 33h12v7H26z" fill="#f3f6ff"/>
+  <path d="M22 12h20v6H22zM27 27h10v6H27zM22 40h20v5H22z" fill="#ffb347"/>
+</svg>
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#0b0d17">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>Fantasy Pixel RPG Character Sheet</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#0b0d17;--panel:#151a2b;--panel2:#10142200;--panel3:#1f2640;--inset:#0d1020;
+--line:#3a4466;--line2:#5b6a96;--ink:#04050a;
+--text:#eef1fb;--muted:#98a2c0;
+--gold:#ffcf5a;--gold2:#ffe5a0;--accent-gold:#ffcf5a;
+--red:#ff6464;--green:#6bdc9a;--blue:#6cb0ff;--purple:#c58aff;--orange:#ff9b58;--cyan:#5fdcec;
+--hh:64px;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;--pxb:0 -2px 0 0 var(--c,#3a4466),0 2px 0 0 var(--c,#3a4466),-2px 0 0 0 var(--c,#3a4466),2px 0 0 0 var(--c,#3a4466)}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hh) + env(safe-area-inset-top,0px))}
+body{margin:0;min-height:100%;color:var(--text);font-family:"Kanit",sans-serif;line-height:1.4;
+background:var(--bg)}
+button{font-family:inherit;color:inherit}
+button:disabled{cursor:not-allowed}
+.pixel{font-family:"Press Start 2P",monospace}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--inset)}
+::-webkit-scrollbar-thumb{background:var(--line2);border:2px solid var(--inset)}
+*{scrollbar-color:var(--line2) var(--inset);scrollbar-width:thin}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;background:rgba(7,9,16,.97);border-bottom:2px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.header-inner{max-width:1550px;margin:auto;padding:10px 20px;min-height:var(--hh);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:"Press Start 2P",monospace;color:var(--gold);font-size:12px;line-height:1.6}
+.logo span{display:block;margin-top:4px;color:var(--muted);font-family:"Kanit",sans-serif;font-size:12px;text-shadow:none}
+.tabs{display:flex;gap:10px}
+.tab{--c:var(--line);padding:10px 16px;border:none;background:var(--inset);cursor:pointer;font-family:"Press Start 2P",monospace;font-size:10px;color:var(--muted);box-shadow:var(--pxb);transition:transform .08s}
+.tab:hover{color:#fff;--c:var(--line2)}
+.tab.active{--c:var(--gold2);background:var(--gold);color:#1a1200}
+
+/* MAIN */
+.container{width:min(1550px,100%);margin:auto;padding:22px 20px 40px}
+.page{display:none}
+.page.active{display:block}
+
+/* CLASS SELECTOR */
+.class-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.class-btn{--c:var(--line);position:relative;display:grid;grid-template-columns:56px 1fr;column-gap:14px;align-items:center;min-height:84px;padding:13px 14px;background:var(--panel);border:none;text-align:left;cursor:pointer;box-shadow:var(--pxb);transition:transform .1s}
+.class-btn:hover{--c:var(--line2)}
+.class-btn.active{--c:var(--gold);background:rgba(255,207,90,.08)}
+.class-icon{float:none;grid-row:span 2;width:56px;height:56px;display:grid;place-items:center;font-size:30px;background:var(--inset);box-shadow:inset 0 0 0 2px var(--line)}
+.class-btn.active .class-icon{box-shadow:inset 0 0 0 2px var(--gold)}
+.class-name{font-size:18px;font-weight:600;align-self:end}
+.class-role{color:var(--muted);font-size:13px;align-self:start}
+
+/* LAYOUT */
+.rpg-layout{display:grid;grid-template-columns:380px minmax(0,1fr);gap:22px;align-items:start}
+aside{position:sticky;top:calc(var(--hh) + 14px);max-height:calc(100vh - var(--hh) - 28px);overflow-y:auto;padding:5px 12px 12px 5px;margin:-5px -12px -12px -5px}
+.panel{--c:var(--line);background:var(--panel);box-shadow:var(--pxb);overflow:hidden}
+.panel + .panel{margin-top:18px}
+.panel-title{padding:12px 14px;background:transparent;border-bottom:2px solid var(--line);color:#c9d0e4;font-family:"Press Start 2P",monospace;font-size:9px;line-height:1.5;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panel-title > span:not(:first-child){font-family:"Kanit",sans-serif;font-weight:400;font-size:12px;color:var(--muted)}
+.panel-body{padding:14px}
+.panel[data-fold] > .panel-title{cursor:pointer;user-select:none}
+.panel[data-fold] > .panel-title::after{content:"▼";color:var(--muted);font-size:9px;margin-left:auto;padding-left:10px}
+.panel[data-fold].folded > .panel-title::after{content:"▶"}
+.panel[data-fold].folded > .panel-body{display:none}
+.panel[data-fold].folded > .panel-title{border-bottom:none}
+.panel[data-fold] > .panel-title:hover{color:#fff}
+
+/* CHARACTER */
+.character-header{text-align:center;padding:20px 14px 16px;border-bottom:2px solid var(--line)}
+.character-avatar{--c:var(--gold);width:88px;height:88px;margin:4px auto 0;display:grid;place-items:center;background:var(--inset);font-size:46px;box-shadow:var(--pxb)}
+.character-name{margin-top:14px;font-size:22px;font-weight:600}
+.character-name-input{width:100%;background:transparent;border:none;border-bottom:2px solid var(--line2);color:var(--text);text-align:center;font-family:"Kanit",sans-serif;outline:none;padding:2px 0 4px;transition:border-color .15s}
+.character-name-input:focus{border-bottom-color:var(--gold)}
+.character-name-input::placeholder{color:var(--muted)}
+.race-row{margin-top:12px;display:flex;justify-content:center}
+.race-select{--c:var(--line2);background:var(--inset);color:var(--text);border:none;box-shadow:var(--pxb);padding:7px 12px;min-width:170px;font-family:"Kanit",sans-serif;font-size:14px;cursor:pointer;outline:none}
+.race-select:focus{--c:var(--gold)}
+.race-bonus{margin-top:8px;min-height:16px;color:var(--cyan);font-size:12px}
+.level-text{margin-top:6px;color:var(--gold);font-family:"Press Start 2P",monospace;font-size:12px}
+.level-controls{display:flex;justify-content:center;gap:10px;margin-top:12px}
+.level-btn{--c:var(--line2);min-width:70px;min-height:38px;padding:6px 12px;border:none;background:var(--inset);cursor:pointer;font-size:13px;font-weight:600;box-shadow:var(--pxb);transition:transform .08s}
+.level-btn:hover{--c:var(--gold);background:var(--gold);color:#1a1200}
+.level-btn:last-child:hover{--c:var(--red);background:var(--red);color:#1a0000}
+
+/* HP + COMBAT */
+.hp-box{margin-top:16px}
+.hp-label{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--muted)}
+.hp-label span:last-child{color:var(--text);font-family:"Press Start 2P",monospace;font-size:11px}
+.hp-bar{--c:var(--ink);position:relative;height:12px;margin-top:6px;background:var(--inset);box-shadow:var(--pxb),inset 0 0 0 2px var(--line)}
+.hp-fill{height:100%;width:100%;background:var(--red);transition:width .25s steps(8)}
+.combat-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.combat-stat{--c:var(--line);padding:10px 2px 8px;background:var(--inset);text-align:center;box-shadow:var(--pxb)}
+.combat-stat b{display:block;color:var(--gold);font-family:"Press Start 2P",monospace;font-size:13px;white-space:nowrap;line-height:1.4}
+.combat-stat small{display:block;margin-top:5px;color:var(--muted);font-size:11px;letter-spacing:.5px}
+.ac-detail{margin-top:10px;padding:8px 10px;background:var(--inset);box-shadow:inset 3px 0 0 var(--line2);color:#c9d0e4;font-size:12px;line-height:1.55;text-align:left}
+.ac-detail span{color:var(--muted)}
+
+/* ABILITY SCORES */
+.section-title{margin:0 0 12px;color:#c9d0e4;font-family:"Press Start 2P",monospace;font-size:10px;font-weight:400}
+.stat-points{--c:var(--line);margin-bottom:14px;padding:10px 12px;background:var(--inset);box-shadow:var(--pxb);display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.stat-points strong{color:var(--gold);font-family:"Press Start 2P",monospace;font-size:13px}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{--c:var(--line);display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:6px;padding:8px;background:var(--inset);box-shadow:var(--pxb)}
+.stat-name{color:var(--muted);font-family:"Press Start 2P",monospace;font-size:9px}
+.stat-value{font-family:"Press Start 2P",monospace;font-size:14px;line-height:1.3}
+.mod{margin-top:2px;color:var(--green);font-size:12px}
+.stat-race{margin-left:4px;color:var(--cyan);font-size:11px}
+.stat-buttons{display:flex;flex-direction:row;gap:4px}
+.stat-buttons button{width:28px;height:32px;padding:0;border:none;background:var(--inset);box-shadow:inset 0 0 0 2px var(--line2);cursor:pointer;font-size:16px;font-weight:700;line-height:1}
+.stat-buttons button:hover{background:var(--gold);color:#1a1200}
+
+/* SAVES + D&D SKILLS */
+.save-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.save-row,.dnd-skill{--c:var(--line);background:var(--inset);box-shadow:var(--pxb)}
+.save-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px}
+.save-left{display:flex;align-items:center;gap:8px}
+.save-proficient,.dnd-skill-dot{width:10px;height:10px;background:#3b4360;flex:none}
+.save-row.proficient{--c:#7d6a30}
+.save-row.proficient .save-proficient{background:var(--gold)}
+.save-name{font-size:13px;color:#c1c9de}
+.save-value{color:var(--green);font-family:"Press Start 2P",monospace;font-size:11px}
+.skill-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filter-btn{--c:var(--line);padding:6px 10px;border:none;background:var(--inset);color:var(--muted);cursor:pointer;font-size:12px;box-shadow:var(--pxb)}
+.filter-btn:hover{color:#fff}
+.filter-btn.active{--c:var(--gold2);color:#1a1200;background:var(--gold)}
+.dnd-skills{display:grid;grid-template-columns:1fr;gap:7px;max-height:440px;overflow-y:auto;padding:3px 8px 3px 3px}
+.dnd-skill{display:grid;grid-template-columns:12px 1fr auto;gap:8px;align-items:center;padding:7px 10px}
+.dnd-skill.proficient{--c:#2f6a4a}
+.dnd-skill.proficient .dnd-skill-dot{background:var(--green)}
+.dnd-skill-name{font-size:13px}
+.dnd-skill-ability{color:var(--muted);font-size:11px}
+.dnd-skill-value{color:var(--green);font-family:"Press Start 2P",monospace;font-size:11px}
+
+/* EQUIPMENT */
+.equip-slot + .equip-slot{margin-top:16px}
+.equip-label{font-size:13px;font-weight:600;color:#cdd4e8}
+.equip-current{margin:6px 0 10px;padding:8px 10px;background:var(--inset);box-shadow:inset 3px 0 0 var(--gold);color:var(--gold2);font-size:13px}
+.tier-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tier-btn{--c:var(--line);padding:8px 4px;text-align:center;background:var(--inset);border:none;box-shadow:var(--pxb);color:var(--muted);cursor:pointer;line-height:1.35}
+.tier-btn b{display:block;font-size:13px;font-weight:600}
+.tier-btn span{display:block;font-size:11px}
+.tier-btn:hover:not(:disabled){--c:var(--line2);color:#fff}
+.tier-btn.active{--c:var(--gold2);background:var(--gold);color:#1a1200}
+.tier-btn.locked{opacity:.4}
+.equip-hint{margin-top:14px;color:var(--muted);font-size:11px;text-align:center}
+
+/* SUBCLASS */
+.subclass-list{display:grid;gap:10px}
+.subclass-btn{--c:var(--line);width:100%;padding:11px 12px;text-align:left;background:var(--inset);border:none;box-shadow:var(--pxb);cursor:pointer;transition:transform .1s}
+.subclass-btn:hover:not(.locked){--c:var(--line2)}
+.subclass-btn.selected{--c:var(--purple);background:rgba(197,138,255,.14)}
+.subclass-btn.locked{opacity:.45;cursor:not-allowed}
+.subclass-btn strong{display:block;font-size:14px}
+.subclass-btn small{color:var(--muted);font-size:12px}
+
+/* SKILL TREE */
+.skill-header{flex-wrap:wrap}
+.sp-display{--c:var(--blue);display:flex;align-items:center;gap:10px;padding:7px 12px;background:var(--inset);box-shadow:var(--pxb);font-family:"Kanit",sans-serif;font-size:13px;color:var(--blue)}
+.sp-number{color:var(--text);font-family:"Press Start 2P",monospace!important;font-size:12px!important}
+.passive-box{--c:#7d6a30;padding:14px 16px;margin-bottom:22px;background:rgba(255,207,90,.06);box-shadow:var(--pxb)}
+.passive-title{color:var(--gold);font-family:"Press Start 2P",monospace;font-size:9px;margin-bottom:8px}
+.passive-desc{color:#cfd5e6;line-height:1.6;font-size:14px}
+.passive-race{margin-top:10px;padding-top:10px;border-top:2px solid #2f6b75;color:#8fe6f2}
+.passive-race small{display:block;margin-top:4px;color:var(--muted)}
+.passive-subclass{margin-top:10px;padding-top:10px;border-top:2px solid #6a4f8c;color:#dab4ff}
+.skill-section{margin-top:22px}
+.section-line-title{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.section-line-title h3{margin:0;font-size:16px;font-weight:600;white-space:nowrap}
+.section-line{flex:1;height:2px;background:var(--line)}
+.skill-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.skill-slot{--c:var(--line);position:relative;overflow:hidden;background:var(--panel);box-shadow:var(--pxb);cursor:pointer;transition:transform .1s}
+.skill-slot:hover{--c:var(--gold)}
+.skill-slot.subclass-skill{--c:#7a5aa6}
+.skill-slot.subclass-skill:hover{--c:var(--purple)}
+.skill-slot.locked{opacity:.45}
+.skill-top{display:flex;align-items:center;gap:12px;padding:12px 12px 8px}
+.skill-icon{flex:0 0 48px;width:48px;height:48px;display:grid;place-items:center;font-size:26px;background:var(--inset);box-shadow:inset 0 0 0 2px var(--line2)}
+.subclass-skill .skill-icon{box-shadow:inset 0 0 0 2px var(--purple)}
+.skill-info{flex:1;min-width:0}
+.skill-name{font-size:16px;font-weight:600;line-height:1.25}
+.skill-type{margin-top:3px;color:var(--muted);font-size:12px}
+.upgrade-badge{display:inline-block;margin-left:6px;padding:0 6px;background:rgba(197,138,255,.2);color:var(--purple);font-size:10px;font-weight:600;vertical-align:middle;box-shadow:inset 0 0 0 1px var(--purple)}
+.skill-cost{align-self:flex-start;padding:4px 8px;background:var(--inset);box-shadow:inset 0 0 0 2px #2d5a96;color:var(--blue);font-size:12px;font-weight:600;white-space:nowrap}
+.skill-body{padding:0 12px 12px}
+.skill-effect{color:#d3d9ea;font-size:13px;line-height:1.5}
+.skill-damage-line{margin-top:8px;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.skill-damage-line .dmg-value{color:var(--red);font-weight:700}
+.skill-desc-preview,.tag.damage{display:none}
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{padding:2px 7px;background:var(--inset);box-shadow:inset 0 0 0 1px var(--line);color:#d8dde7;font-size:11px}
+.tag.level{color:var(--gold2);box-shadow:inset 0 0 0 1px #7d6a30}
+.tag.modifier{color:var(--green);box-shadow:inset 0 0 0 1px #2f6a4a}
+.tag.range{color:#bfe3ff;box-shadow:inset 0 0 0 1px #2d5a96}
+.lock-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,7,12,.5);font-size:13px;font-weight:600;gap:6px}
+.empty-tree{grid-column:1/-1;padding:30px;text-align:center;border:3px dashed var(--line);color:var(--muted)}
+
+/* DATABASE */
+.database{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.db-card{--c:var(--line);padding:16px 18px;background:var(--inset);box-shadow:var(--pxb)}
+.db-card h3{margin:0 0 10px;color:var(--gold);font-size:17px}
+.db-card p{margin:0 0 8px;color:#b4bcd2;line-height:1.65;font-size:14px}
+
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,3,8,.82)}
+.modal.show{display:flex}
+.skill-detail{--c:var(--gold);width:min(640px,100%);max-height:calc(100vh - 40px);overflow-y:auto;background:var(--panel);box-shadow:var(--pxb)}
+.detail-header{display:flex;align-items:center;gap:16px;padding:16px 18px;background:transparent;border-bottom:2px solid var(--line)}
+.detail-icon{width:68px;height:68px;flex:0 0 68px;display:grid;place-items:center;background:var(--inset);box-shadow:inset 0 0 0 3px var(--gold);font-size:38px}
+.detail-name{font-size:22px;font-weight:600;line-height:1.25}
+.detail-sub{color:var(--muted);font-size:13px}
+.detail-content{padding:8px 18px 18px}
+.detail-row{display:grid;grid-template-columns:130px 1fr;gap:10px;padding:10px 0;border-bottom:2px solid #2c3452}
+.detail-label{color:var(--muted);font-size:13px}
+.detail-value{color:var(--text);line-height:1.55}
+.close-btn{--c:var(--line2);width:100%;min-height:44px;margin-top:16px;border:none;background:var(--inset);cursor:pointer;font-family:"Press Start 2P",monospace;font-size:10px;box-shadow:var(--pxb)}
+.close-btn:hover{--c:var(--gold);background:var(--gold);color:#1a1200}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+.rpg-layout{grid-template-columns:1fr}
+aside{position:static;max-height:none;overflow:visible;padding:0;margin:0}
+}
+@media(max-width:750px){
+:root{--hh:54px}
+.container{padding:14px 12px 30px}
+.header-inner{padding:8px 12px;gap:10px}
+.logo{font-size:10px}.logo span{display:none}
+.tab{padding:9px 10px;font-size:9px}
+.class-selector{grid-template-columns:1fr;gap:12px}
+.skill-grid,.database{grid-template-columns:1fr}
+.dnd-skills{max-height:360px}
+.modal{align-items:flex-end;padding:0}
+.skill-detail{max-height:88vh;width:100%}
+.detail-row{grid-template-columns:100px 1fr}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+
+.pxi{display:inline-block;width:24px;height:24px;vertical-align:middle}
+.class-icon .pxi,.skill-icon .pxi{display:block;width:36px;height:36px}
+.character-avatar .pxi{display:block;width:60px;height:60px}
+.detail-icon .pxi{display:block;width:48px;height:48px}
+.lock-overlay .pxi{display:none}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+<div class="header-inner">
+
+    <div class="logo">
+        FANTASY RPG
+        <span>CHARACTER SHEET & SKILL TREE</span>
+    </div>
+
+    <div class="tabs">
+
+        <button
+            class="tab active"
+            onclick="switchPage('status',this)"
+        >
+            CHARACTER
+        </button>
+
+        <button
+            class="tab"
+            onclick="switchPage('database',this)"
+        >
+            DATABASE
+        </button>
+
+    </div>
+
+</div>
+
+</header>
+
+
+<main class="container">
+
+<!-- =========================================================
+     CHARACTER PAGE
+========================================================= -->
+
+<section
+    id="status"
+    class="page active"
+>
+
+    <!-- CLASS SELECTOR -->
+    <div
+        id="classSelector"
+        class="class-selector"
+    ></div>
+
+
+    <div class="rpg-layout">
+
+        <!-- =================================================
+             LEFT CHARACTER PANEL
+        ================================================= -->
+
+        <aside>
+
+            <!-- CHARACTER -->
+            <div class="panel">
+
+                <div class="character-header">
+
+                    <div
+                        id="avatar"
+                        class="character-avatar"
+                    >
+                        ⚔️
+                    </div>
+
+                    <input
+                        id="characterName"
+                        class="character-name character-name-input"
+                        value="ผู้กล้าอาเรีย"
+                        placeholder="ตั้งชื่อตัวละคร..."
+                        oninput="charState.name=this.value"
+                    >
+
+                    <div class="race-row">
+                        <select
+                            id="raceSelect"
+                            class="race-select"
+                            onchange="selectRace(this.value)"
+                        ></select>
+                    </div>
+
+                    <div id="raceBonus" class="race-bonus"></div>
+
+                    <div
+                        id="levelText"
+                        class="level-text"
+                    >
+                        LEVEL 1
+                    </div>
+
+                    <div class="level-controls">
+
+                        <button
+                            class="level-btn"
+                            onclick="levelDown()"
+                        >
+                            − LV
+                        </button>
+
+                        <button
+                            class="level-btn"
+                            onclick="levelUp()"
+                        >
+                            + LV
+                        </button>
+
+                        <button
+                            class="level-btn"
+                            onclick="resetLevel()"
+                        >
+                            RESET
+                        </button>
+
+                    </div>
+
+
+                    <!-- HP -->
+
+                    <div class="hp-box">
+
+                        <div class="hp-label">
+
+                            <span>HP</span>
+
+                            <span id="hpText">
+                                20 / 20
+                            </span>
+
+                        </div>
+
+                        <div class="hp-bar">
+
+                            <div
+                                id="hpFill"
+                                class="hp-fill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- COMBAT -->
+
+                    <div class="combat-stats">
+
+                        <div class="combat-stat">
+
+                            <b id="ac">
+                                16
+                            </b>
+
+                            <small>
+                                AC
+                            </small>
+
+                        </div>
+
+                        <div class="combat-stat">
+
+                            <b id="speed">
+                                30
+                            </b>
+
+                            <small>
+                                SPEED
+                            </small>
+
+                        </div>
+
+                        <div class="combat-stat">
+
+                            <b id="prof">
+                                +2
+                            </b>
+
+                            <small>
+                                PROF
+                            </small>
+
+                        </div>
+
+                        <div class="combat-stat">
+
+                            <b id="atk">
+                                +5
+                            </b>
+
+                            <small>
+                                ATK
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <div id="acDetail" class="ac-detail"></div>
+
+                    <div id="atkDetail" class="ac-detail"></div>
+
+                </div>
+
+
+                <!-- ABILITY SCORES -->
+
+                <div class="panel-body">
+
+                    <h3 class="section-title">
+                        ABILITY SCORES
+                    </h3>
+
+                    <div
+                        id="statPoints"
+                        class="stat-points"
+                    >
+                        <span>
+                            Stat Points
+                        </span>
+
+                        <strong>
+                            0
+                        </strong>
+                    </div>
+
+                    <div
+                        id="statsGrid"
+                        class="stats-grid"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EQUIPMENT -->
+
+            <div class="panel" data-fold="open">
+
+                <div class="panel-title">
+
+                    <span>
+                        EQUIPMENT
+                    </span>
+
+                    <span style="color:#80899b; font-size:11px;">
+                        อุปกรณ์สวมใส่
+                    </span>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <div id="equipList"></div>
+
+                    <div class="equip-hint">
+                        กลาง ปลดล็อก Lv.4 · สูง ปลดล็อก Lv.8
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVING THROW -->
+
+            <div class="panel" data-fold="closed">
+
+                <div class="panel-title">
+                    SAVING THROWS
+                </div>
+
+                <div class="panel-body">
+
+                    <div
+                        id="saveGrid"
+                        class="save-grid"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DND SKILLS -->
+
+            <div class="panel" data-fold="closed">
+
+                <div class="panel-title">
+
+                    <span>
+                        D&D SKILLS
+                    </span>
+
+                    <span
+                        id="skillCount"
+                        style="
+                        color:#80899b;
+                        font-size:11px;
+                        "
+                    >
+                        18
+                    </span>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <div
+                        id="skillFilter"
+                        class="skill-filter"
+                    ></div>
+
+                    <div
+                        id="dndSkills"
+                        class="dnd-skills"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUBCLASS -->
+
+            <div class="panel" data-fold="open">
+
+                <div class="panel-title">
+
+                    <span>
+                        SUBCLASS
+                    </span>
+
+                    <span>
+                        LV.5
+                    </span>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <div
+                        id="subclassList"
+                        class="subclass-list"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             RIGHT SKILL AREA
+        ================================================= -->
+
+        <main class="skill-area">
+
+            <div class="panel">
+
+                <div class="panel-title skill-header">
+
+                    <span>
+                        SKILL TREE
+                    </span>
+
+                    <div class="sp-display">
+
+                        <span>
+                            ⚡ SP
+                        </span>
+
+                        <span
+                            id="spDisplay"
+                            class="sp-number"
+                        >
+                            5 / 5
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel-body">
+
+                    <!-- PASSIVE -->
+
+                    <div class="passive-box">
+
+                        <div class="passive-title">
+                            ✦ CLASS PASSIVE
+                        </div>
+
+                        <div
+                            id="classPassive"
+                            class="passive-desc"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- BASE -->
+
+                    <div class="skill-section">
+
+                        <div class="section-line-title">
+
+                            <h3>
+                                ⚔ BASE SKILLS
+                            </h3>
+
+                            <div class="section-line"></div>
+
+                        </div>
+
+                        <div
+                            id="baseSkills"
+                            class="skill-grid"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- SUBCLASS -->
+
+                    <div class="skill-section">
+
+                        <div class="section-line-title">
+
+                            <h3>
+                                ✦ SUBCLASS PATH
+                            </h3>
+
+                            <div class="section-line"></div>
+
+                        </div>
+
+                        <div
+                            id="subclassSkills"
+                            class="skill-grid"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DATABASE
+========================================================= -->
+
+<section
+    id="database"
+    class="page"
+>
+
+    <div class="panel">
+
+        <div class="panel-title">
+            RPG DATABASE
+        </div>
+
+        <div class="panel-body">
+
+            <div class="database">
+
+                <div class="db-card">
+
+                    <h3>
+                        ⚔️ Ability Score
+                    </h3>
+
+                    <p>
+                        STR, DEX, CON, INT, WIS และ CHA
+                        ใช้เป็นพื้นฐานในการคำนวณ
+                        Modifier และความสามารถต่าง ๆ
+                    </p>
+
+                    <p>
+                        Modifier =
+                        floor((Ability Score − 10) ÷ 2)
+                    </p>
+
+                </div>
+
+
+                <div class="db-card">
+
+                    <h3>
+                        🛡️ Saving Throw
+                    </h3>
+
+                    <p>
+                        AC = ค่าเกราะฐาน + DEX (จำกัดตามชนิดเกราะ) + โล่/โบนัส
+                        เปลี่ยนตาม Class, Subclass และเกราะที่สวมใส่ (เริ่มต้น / กลาง / สูง)</p>
+
+                    <p>
+                        ATK = PROF + Ability Mod + โบนัสอาวุธ (+0 / +1 / +2)
+                    </p>
+
+                    <p>
+                        แต่ละ Class มี Saving Throw
+                        ที่เชี่ยวชาญ 2 ค่า
+                    </p>
+
+                    <p>
+                        Proficient Saving Throw =
+                        Ability Modifier + Proficiency Bonus
+                    </p>
+
+                </div>
+
+
+                <div class="db-card">
+
+                    <h3>
+                        🎯 D&D Skills
+                    </h3>
+
+                    <p>
+                        ระบบมี D&D Skills ครบ 18 Skills
+                        และสามารถกรองตาม Ability ได้
+                    </p>
+
+                </div>
+
+
+                <div class="db-card">
+
+                    <h3>
+                        ⚡ Skill Point
+                    </h3>
+
+                    <p>
+                        SP เป็นทรัพยากรสำหรับใช้ Skill
+                    </p>
+
+                    <p>
+                        MAX SP = 5
+                    </p>
+
+                    <p>
+                        ค่า SP สามารถนำไปเชื่อมกับ
+                        ระบบต่อสู้ในภายหลังได้
+                    </p>
+
+                </div>
+
+
+                <div class="db-card">
+
+                    <h3>
+                        🌟 Subclass
+                    </h3>
+
+                    <p>
+                        Level 5 สามารถเลือก Subclass
+                        ได้ 1 สาย
+                    </p>
+
+                    <p>
+                        แต่ละ Subclass มี Passive
+                        และ Skill Tree ของตัวเอง
+                    </p>
+
+                </div>
+
+
+                <div class="db-card">
+
+                    <h3>
+                        🔓 Skill Progression
+                    </h3>
+
+                    <p>
+                        LV.1–4 → Base Skills
+                    </p>
+
+                    <p>
+                        LV.5 → Subclass + Passive
+                    </p>
+
+                    <p>
+                        LV.7 → Advanced Skill
+                    </p>
+
+                    <p>
+                        LV.10 → Ultimate Skill
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================================================
+     SKILL MODAL
+========================================================= -->
+
+<div
+    id="modal"
+    class="modal"
+    onclick="closeModal(event)"
+>
+
+    <div
+        class="skill-detail"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="detail-header">
+
+            <div
+                id="detailIcon"
+                class="detail-icon"
+            >
+                ⚔️
+            </div>
+
+            <div>
+
+                <div
+                    id="detailName"
+                    class="detail-name"
+                >
+                    Skill
+                </div>
+
+                <div
+                    id="detailSub"
+                    class="detail-sub"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="detail-content">
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    ประเภท
+                </div>
+
+                <div
+                    id="detailType"
+                    class="detail-value"
+                ></div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Required Level
+                </div>
+
+                <div
+                    id="detailLevel"
+                    class="detail-value"
+                ></div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    SP Cost
+                </div>
+
+                <div
+                    id="detailSP"
+                    class="detail-value"
+                ></div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    ระยะ (Range)
+                </div>
+
+                <div
+                    id="detailRange"
+                    class="detail-value"
+                ></div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Modifier
+                </div>
+
+                <div
+                    id="detailMod"
+                    class="detail-value"
+                ></div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Damage
+                </div>
+
+                <div
+                    id="detailDamage"
+                    class="detail-value"
+                ></div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Effect
+                </div>
+
+                <div
+                    id="detailEffect"
+                    class="detail-value"
+                ></div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Description
+                </div>
+
+                <div
+                    id="detailDesc"
+                    class="detail-value"
+                ></div>
+
+            </div>
+
+
+            <button
+                class="close-btn"
+                onclick="closeModal()"
+            >
+                CLOSE
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+/* PIXEL ICONS (12x12 sprites, replaces emoji for class / subclass / skill icons) */
+const PIX={"shapes":{"xswords":["bw........wb",".bw......wb.","..bw....wb..","...bw..wb...","....bwwb....","....wbbw....","...wb..bw...","..dcw..wcd..","..dd....dd..",".dd......dd.","dd........dd","c..........c"],"dagger":[".....ww.....",".....wb.....",".....wb.....",".....wb.....",".....wb.....",".....wb.....","...dddddd...",".....cc.....",".....cc.....",".....dd.....","....dddd...."],"shield":["cccccccccccc","cbbbbaaaaaac","cbbbbaaaaaac","cbbbwwwaaaac","cbbbbaaaaaac",".cbbbaaaaac.",".cbbbaaaaac.","..cbbaaaac..","...cbaaac...","....cbac....",".....cc....."],"flame":["......a.....",".....aa.....","....aaa..a..","....aaba.aa.","...aaabbaaa.","..aaabbbbaa.","..aabbwwbaa.","..aabwwwbaa.","..aabwwwbaa.","...aabbbaa..","....aaaaa..."],"skull":["..wwwwwwww..",".wwwwwwwwww.","wwwwwwwwwwww","wwkkkwwkkkww","wwkkkwwkkkww","wwwwwkkwwwww",".wwwwkkwwww.","..wwwwwwww..","...wkwkwkw..","...wwwwwww.."],"comet":["c...........",".cc.........","..ccb.......","...cbb......","....bbaa....",".....baaaa..","......aawwa.",".....aawwwwa",".....aawwwwa","......aaaaa.","......aaaa.."],"sparkle":["....a.......","....w.....a.","....w....awa","...awa....a.","aawwwwwaa...","...awa......","....w....a..","....w...awa.","....a....a.."],"star":[".....aa.....",".....aa.....","....aaaa....","aaaaaaaaaaaa",".aabbbbbbaa.","..aabbbbaa..","...aabbaa...","...aaaaaa...","..aaa..aaa..","..aa....aa.."],"drop":[".....aa.....",".....aa.....","....aaaa....","...aabbaa...","..aabbaaaa..","..aabbaaaa..","..aaaaaaaa..","..aaaaaaca..","...aaaaaa...","....cccc...."],"dragon":["d..........d","dd........dd",".dd.aaaa.dd.","..aaaaaaaa..",".aawwaawwaa.",".aakwaawkaa.",".aaaaaaaaaa.","..aacaacaa..","...aaaaaa...","....awwa...."],"burst":[".a....a....a","..a...a...a.","...a.aaa.a..","....abbba...","aaaabbwwbaaa","aaaabwwwbaaa","....abbba...","...a.aaa.a..","..a...a...a.",".a....a....a"],"bolt":["......aaa...",".....aaa....","....aaa.....","...aaa......","..aaaaaaaa..",".....aaaa...","....aaa.....","...aaa......","..aa........"],"mask":["..aaaaaaaa..",".aaaaaaaaaa.","aaakkaakkaaa","aaakkaakkaaa","aaaaaaaaaaaa","aakaaaaaakaa",".aakaaaakaa.","..aakkkkaa..","...aaaaaa..."],"bow":["..aa........",".a.ad.......",".a..ad......","a....ad.....","a.....d...w.","a.cccccccwww","a.....d...w.","a....ad.....",".a..ad......",".a.ad.......","..aa........"],"moon":["...cccccc...","..caaaaaac..",".caabbaaaac.",".cabbbaaaac.",".caabaaacac.",".caaaaaaaac.",".caaacaaaac.","..caaaaaac..","...cccccc..."],"crescent":["....aaaa....","..aaaaa.....",".aaabb......",".aabb.......","aaab........","aaab........","aaab........",".aaab....a..",".aaaaaaaaaa.","..aaaaaaaa..","....aaaa...."],"spiral":["...aaaaaa...","..aabbbbaa..",".aab....baa.",".ab..aa...a.",".ab.abba..a.",".ab.ab.a..a.",".ab.abbba.a.",".ab......ba.",".aab....baa.","..aabbbbaa..","...aaaaaa..."],"blossom":["....aaaa....","..aaaaaaaa..",".aaaabbaaaa.",".aaabddbaaa.","..aabddbaa..",".aaaabbaaaa.","..aaaaaaaa..","....aaaa...."],"mega":["........aa..","......aaaaa.","..ccaaaaaaa.",".cccaaabbaaa",".cccaaabbaaa","..ccaaaaaaa.","..dc..aaaaa.","..dd...aa..."],"axe":["..aaaa......",".abbbaa.d...","abbbbbaad...","abbbbbbad...","abbbbbaad...",".abbbaa.d...","..aaaa..d...","........d...","........d...","........d...","........c..."],"castle":["a.a..aa..a.a","aaaaaaaaaaaa",".aaaaaaaaaa.",".abaaaaaaba.",".aaaakkaaaa.",".aaakkkkaaa.",".aaakkkkaaa.",".aaakkkkaaa."],"orb":["...aaaaaa...","..aabbaaaa..",".aabwaaaaaa.",".aabaaaaaaa.",".aaaaaaaaca.",".aaaaaaacca.","..aaaaaacc..","...aaaacc...","..dddddddd..",".dddddddddd."],"tornado":["aaaaaaaaaaaa",".bbbbbbbbbb.","..aaaaaaaa..","...bbbbbb...","....aaaa....",".....bb.....",".....aa....."],"wind":["...aaaaaa...","..a......a..",".........a..","aaaaaaaaa...","............","..bbbbbbb...",".b..........","bbbbbbbbbbb.","............","...aaaaaaa.."],"heart":[".aaaa..aaaa.","aabbbaaaaaaa","abbbaaaaaaaa","aaaaaaaaaaaa","aaaaaaaaaaaa",".aaaaaaaaaa.","..aaaaaaaa..","...aaaaaa...","....aaaa....",".....aa....."],"wing":["........aaa.","......aaabba","....aaabbbaa","..aaabbbbaa.",".aaabbbbaa..","aaabbbbaa...","aabbbaa.....",".aaaa......."],"sun":[".....aa.....","..a..aa..a..","...a.bb.a...","....bbbb....","aa.bbwwbb.aa","aa.bbwwbb.aa","....bbbb....","...a.bb.a...","..a..aa..a..",".....aa....."],"crystal":[".....aa.....","....aabb....","...aabbbb...","..aabbwbbb..",".aabbwbbbbb.","..cabbbbbc..","...ccbbbc...","....ccbc....",".....cc....."],"snow":[".....w.....","..w..w..w..","...w.w.w...","....www....","wwwwwwwwwww","....www....","...w.w.w...","..w..w..w..",".....w....."],"target":["...aaaaaa...","..aawwwwaa..",".aawaaaawaa.",".awaawwaawa.",".awawddwawa.",".awawddwawa.",".awaawwaawa.",".aawaaaawaa.","..aawwwwaa..","...aaaaaa..."],"people":["..aa....bb..",".aaaa..bbbb.",".aaaa..bbbb.","..aa....bb..",".aaaa..bbbb.","aaaaaabbbbbb","aaaaaabbbbbb"],"ninja":["...aaaaaa...","..aaaaaaaa..",".aaaaaaaaaa.",".aaddddddaa.",".aawwwwwwaa.",".aawkwwkwaa.",".aaaaaaaaaa.","..aaaaaaaa..","...aaaaaa..."],"person":["...aaaa...","..aaaaaa..","..aaaaaa..","...aaaa...","..aaaaaa..",".aaaaaaaa.","aaaaaaaaaa","aaaaaaaaaa"],"rain":["...aaaa.....","..aaaaaaa...",".aaaaaaaaaa.","aaaaaaaaaaaa",".aaaaaaaaaa.","............","..b..b..b...",".b..b..b....","..b..b..b..."]},"emo":{"⚔":["xswords",{"k":"#0b0d17","w":"#e6ebf7","b":"#9aa6c0","d":"#d39a52","c":"#7a4b25"}],"🗡":["dagger",{"k":"#0b0d17","w":"#e6ebf7","b":"#9aa6c0","d":"#b57be8","c":"#5b3a8c"}],"🛡":["shield",{"k":"#0b0d17","w":"#dbe9ff","a":"#4f7fd1","b":"#7fb0ff","c":"#24407a"}],"🔥":["flame",{"k":"#0b0d17","w":"#ffe27a","a":"#e8472f","b":"#ff9b3a"}],"💀":["skull",{"k":"#0b0d17","w":"#f3f6ff"}],"☠":["skull",{"k":"#0b0d17","w":"#a8f08a"}],"☄":["comet",{"k":"#0b0d17","w":"#fff0a8","a":"#ff7a3a","b":"#ffb347","c":"#c2410c"}],"✨":["sparkle",{"k":"#0b0d17","w":"#fff7d0","a":"#ffd35a"}],"🩸":["drop",{"k":"#0b0d17","w":"#f3f6ff","a":"#d62f3a","b":"#ff7a80","c":"#8f1d28"}],"🐉":["dragon",{"k":"#0b0d17","w":"#ffe9a8","a":"#d94f3a","d":"#e6c27a","c":"#7a1f14"}],"🐲":["dragon",{"k":"#0b0d17","w":"#ffe9a8","a":"#3fb35a","d":"#e6c27a","c":"#1f6b33"}],"💥":["burst",{"k":"#0b0d17","w":"#fff3b0","a":"#ff8a3a","b":"#ffc44a"}],"⚡":["bolt",{"k":"#0b0d17","w":"#f3f6ff","a":"#ffd23a"}],"🎭":["mask",{"k":"#0b0d17","w":"#f3f6ff","a":"#a76bd8"}],"🏹":["bow",{"k":"#0b0d17","w":"#e6ebf7","a":"#b07a43","d":"#c9d0e4","c":"#c9d0e4"}],"🌑":["moon",{"k":"#0b0d17","w":"#f3f6ff","a":"#5a5f82","b":"#7a80a8","c":"#2f3350"}],"🌀":["spiral",{"k":"#0b0d17","w":"#f3f6ff","a":"#4fc8e8","b":"#a6ecff"}],"🌟":["star",{"k":"#0b0d17","w":"#f3f6ff","a":"#ffcf5a","b":"#fff1b8"}],"⭐":["star",{"k":"#0b0d17","w":"#f3f6ff","a":"#f5b82e","b":"#ffe48a"}],"🌸":["blossom",{"k":"#0b0d17","w":"#f3f6ff","a":"#ff8fb8","b":"#ffc2d8","d":"#ffd84a"}],"🌙":["crescent",{"k":"#0b0d17","w":"#f3f6ff","a":"#ffe08a","b":"#fff3c4"}],"📣":["mega",{"k":"#0b0d17","w":"#f3f6ff","a":"#ff6464","b":"#ffa0a0","c":"#c9d0e4","d":"#b07a43"}],"📢":["mega",{"k":"#0b0d17","w":"#f3f6ff","a":"#ff9b58","b":"#ffc9a0","c":"#c9d0e4","d":"#b07a43"}],"🪓":["axe",{"k":"#0b0d17","w":"#f3f6ff","a":"#8a93a6","b":"#d0d6e6","d":"#b8763f","c":"#6e4524"}],"🏰":["castle",{"k":"#0b0d17","w":"#f3f6ff","a":"#9aa3b8","b":"#c9d0e4"}],"🔮":["orb",{"k":"#0b0d17","w":"#f3f6ff","a":"#8f5bd6","b":"#c4a0ff","c":"#5a3399","d":"#4a5578"}],"🌪":["tornado",{"k":"#0b0d17","w":"#f3f6ff","a":"#7f8fb3","b":"#b9c6e6"}],"🌌":["spiral",{"k":"#0b0d17","w":"#f3f6ff","a":"#8f5bd6","b":"#c4a0ff"}],"💚":["heart",{"k":"#0b0d17","w":"#f3f6ff","a":"#3fcf7a","b":"#9cf0bd"}],"🪽":["wing",{"k":"#0b0d17","w":"#f3f6ff","a":"#b8c8ff","b":"#ffffff"}],"☀":["sun",{"k":"#0b0d17","w":"#fff2a0","a":"#ffb347","b":"#ffd84a"}],"🔷":["crystal",{"k":"#0b0d17","w":"#e3f1ff","a":"#4f8fe8","b":"#8fc4ff","c":"#2a528f"}],"❄":["snow",{"k":"#0b0d17","w":"#bff3ff"}],"🎯":["target",{"k":"#0b0d17","w":"#f3f6ff","a":"#ff6464","d":"#ff6464"}],"👥":["people",{"k":"#0b0d17","w":"#f3f6ff","a":"#6cb0ff","b":"#c9d0e4"}],"🥷":["ninja",{"k":"#0b0d17","w":"#f3f6ff","a":"#4a5578","d":"#e04848"}],"👤":["person",{"k":"#0b0d17","w":"#f3f6ff","a":"#9aa6c8"}],"🌧":["rain",{"k":"#0b0d17","w":"#f3f6ff","a":"#9fb4d8","b":"#5fb0ff"}],"💨":["wind",{"k":"#0b0d17","w":"#f3f6ff","a":"#9fb4d8","b":"#6f84ad"}]}};
+const _pxCache={};
+function pixIcon(e){
+    const key=String(e||"").replace(/\uFE0F/g,"").trim();
+    const m=PIX.emo[key];
+    if(!m)return e;
+    if(_pxCache[key])return _pxCache[key];
+    const rows=PIX.shapes[m[0]],pal=m[1];
+    const h=rows.length,w=Math.max(...rows.map(r=>r.length));
+    const ox=Math.floor((12-w)/2),oy=Math.floor((12-h)/2);
+    let r="";
+    rows.forEach((row,y)=>{
+        let x=0;
+        while(x<row.length){
+            const ch=row[x];
+            if(ch==="."){x++;continue;}
+            let x2=x;
+            while(x2<row.length&&row[x2]===ch)x2++;
+            r+=`<rect x="${x+ox}" y="${y+oy}" width="${x2-x}" height="1" fill="${pal[ch]}"/>`;
+            x=x2;
+        }
+    });
+    return _pxCache[key]=`<svg class="pxi" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`;
+}
+</script>
+<script>
+
+/* =========================================================
+   D&D SKILLS
+========================================================= */
+
+
+const DND_SKILLS = [
+
+    ["Athletics","STR","พละกำลัง/กายบริหาร"],
+    ["Acrobatics","DEX","กายกรรม/ผาดโผน"],
+    ["Sleight of Hand","DEX","มือเบา"],
+    ["Stealth","DEX","การลอบเร้น"],
+
+    ["Arcana","INT","เวทมนตร์ศาสตร์"],
+    ["History","INT","ประวัติศาสตร์"],
+    ["Investigation","INT","การสืบเจาะลึก"],
+    ["Nature","INT","ธรรมชาติวิทยา"],
+    ["Religion","INT","ศาสนศาสตร์"],
+
+    ["Animal Handling","WIS","การควบคุมสัตว์"],
+    ["Insight","WIS","การหยั่งรู้จิตใจ"],
+    ["Medicine","WIS","การแพทย์"],
+    ["Perception","WIS","การรับรู้"],
+    ["Survival","WIS","การเอาตัวรอด"],
+
+    ["Deception","CHA","การหลอกลวง"],
+    ["Intimidation","CHA","การข่มขู่"],
+    ["Performance","CHA","การแสดง"],
+    ["Persuasion","CHA","การโน้มน้าว"]
+
+];
+
+
+/* =========================================================
+   CLASS DATA
+========================================================= */
+
+const CLASSES_DATA = [
+
+/* =========================================================
+   WARRIOR
+========================================================= */
+
+{
+    id:"Warrior",
+
+    th:"นักรบฝึกหัด",
+
+    icon:"⚔️",
+
+    role:"Tank / Melee / High Durability",
+
+    hpBase:12,
+    hpPerLevel:7,
+    hpConMult:1,
+
+    armor:{name:"Chain Mail (เกราะโซ่)",base:16,dexCap:0},
+    dexMode:"half",
+    speed:30,
+
+    baseStats:{
+        STR:16,
+        DEX:12,
+        CON:14,
+        INT:8,
+        WIS:10,
+        CHA:10
+    },
+
+    saves:["STR","CON"],
+
+    skillsProficient:[
+        "Athletics",
+        "Intimidation",
+        "Perception"
+    ],
+
+    passive:{
+        name:"Extra Attack",
+        desc:
+        "ตั้งแต่ Lv.5 ขึ้นไป: โจมตีพื้นฐาน (ไม่ใช้ SP) ได้ 2 ครั้งต่อเทิร์น (Lv.1-4 โจมตีได้ครั้งเดียวตามปกติ)"
+    },
+
+    subclasses:[
+
+        {
+            id:"Berserker",
+            armor:{name:"Unarmored Fury (ไร้เกราะ 10+DEX+CON, DEX/CON สูงสุด +5 แต่ละตัว)",base:10,dexCap:5,extra:"CON",extraCap:5},
+            hpBonusPerLevel:3,
+            name:"Berserker",
+            icon:"🔥",
+            desc:"นักรบคลั่งที่แลกการป้องกันกับพลังโจมตี",
+            acBonus:-2,
+
+            passive:{
+                name:"Blood Fury",
+                desc:
+                "เมื่อ HP ต่ำกว่า 50% Physical Damage +5 และช่วง Critical กว้างขึ้นเป็น 19–20 (ปกติ 20)"
+            },
+
+            skills:[
+
+                {
+                    id:"b5",
+                    name:"Blood Rage",
+                    icon:"🩸",
+                    type:"Buff",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"STR",
+                    damage:"—",
+                    effect:"Physical Damage +3 เป็นเวลา 2 รอบ",
+                    range:"ตัวเอง (Self)",
+                    desc:"เข้าสู่สภาวะคลุ้มคลั่ง"
+                },
+
+                {
+                    id:"b7",
+                    name:"Whirlwind",
+                    icon:"🌀",
+                    type:"Physical AOE",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"STR",
+                    damage:"2d6 + STR",
+                    effect:"โจมตีศัตรูทุกตัวรอบตัว",
+                    range:"รัศมี 10 ft รอบตัว",
+                    desc:"หมุนอาวุธโจมตีศัตรูรอบตัว"
+                },
+
+                {
+                    id:"b10",
+                    name:"Berserker's Execution",
+                    icon:"💀",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"STR",
+                    damage:"4d8 + STR",
+                    effect:"ถ้าเป้าหมาย HP ต่ำกว่า 30% ดาเมจ x1.5",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"การโจมตีสุดท้ายของ Berserker"
+                }
+
+            ]
+        },
+
+        {
+            id:"Guardian",
+            armor:{name:"Plate + Shield (เกราะเต็มตัว+โล่)",base:18,dexCap:0,shield:2},
+            name:"Guardian",
+            icon:"🛡️",
+            desc:"นักรบสายป้องกัน",
+            acBonus:3,
+            dexMode:"none",
+
+            passive:{
+                name:"Guardian's Oath",
+                desc:
+                "สามารถรับ Damage แทนเพื่อน 1 ครั้งต่อรอบ และลด Damage ที่รับ 3"
+            },
+
+            skills:[
+
+                {
+                    id:"g5",
+                    name:"Shield Fortress",
+                    icon:"🛡️",
+                    type:"Defense",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"STR/CON",
+                    damage:"—",
+                    effect:"+6 AC เป็นเวลา 1 รอบ",
+                    range:"ตัวเอง (Self)",
+                    desc:"ตั้งโล่ป้องกันเต็มรูปแบบ"
+                },
+
+                {
+                    id:"g7",
+                    name:"Guardian Counter",
+                    icon:"⚔️",
+                    type:"Counter",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"STR/CON",
+                    damage:"1d10 + STR/CON (เลือกค่าสูงกว่า)",
+                    effect:"เมื่อถูกโจมตีสวนกลับทันที",
+                    range:"ประชิดตัว (Melee 5 ft, ใช้ตอบโต้)",
+                    desc:"ตั้งท่ารับและตอบโต้"
+                },
+
+                {
+                    id:"g10",
+                    name:"Aegis of Heroes",
+                    icon:"🌟",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"STR/CON",
+                    damage:"—",
+                    effect:"ทั้งทีม +6 AC เป็นเวลา 2 รอบ",
+                    range:"รัศมี 30 ft รอบตัว (ทีม)",
+                    desc:"สร้างเกราะป้องกันขนาดใหญ่"
+                }
+
+            ]
+        },
+
+        {
+            id:"Samurai",
+            armor:{name:"Lamellar (เกราะเกล็ด)",base:14,dexCap:2},
+            hpBonusPerLevel:2,
+            name:"Samurai",
+            icon:"⚔️",
+            desc:"นักดาบผู้เน้นความแม่นยำ",
+            acBonus:0,
+            dexMode:"full",
+
+            passive:{
+                name:"Bushido",
+                desc:
+                "หากไม่ได้รับ Damage ในรอบก่อน การโจมตีครั้งถัดไป x1.5 Damage เมื่อ Critical"
+            },
+
+            skills:[
+
+                {
+                    id:"s5",
+                    name:"Iaijutsu",
+                    icon:"🌸",
+                    type:"Physical",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"STR/DEX",
+                    damage:"1d10 + STR/DEX (เลือกค่าสูงกว่า)",
+                    effect:"Critical เมื่อทอยได้ 18–20",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"ชักดาบและโจมตีในพริบตา"
+                },
+
+                {
+                    id:"s7",
+                    name:"Moon Slash",
+                    icon:"🌙",
+                    type:"Physical AOE",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"STR/DEX",
+                    damage:"2d8 + STR/DEX (เลือกค่าสูงกว่า)",
+                    effect:"โจมตีได้ 2 เป้าหมาย",
+                    range:"ประชิดตัว (Melee 5 ft, สูงสุด 2 เป้าหมาย)",
+                    desc:"ฟันเป็นเสี้ยวจันทร์"
+                },
+
+                {
+                    id:"s10",
+                    name:"Heaven's Sever",
+                    icon:"☄️",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"STR/DEX",
+                    damage:"5d8 + STR/DEX (เลือกค่าสูงกว่า)",
+                    effect:"โจมตีครั้งนี้ได้ Advantage และ Critical เมื่อทอยได้ 18–20",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"ดาบเดียวผ่าการป้องกัน"
+                }
+
+            ]
+        },
+
+        {
+            id:"DragonSlayer",
+            armor:{name:"Half-Plate (เกราะครึ่งตัว)",base:15,dexCap:2},
+            hpBonusPerLevel:1,
+            name:"Dragon Slayer",
+            icon:"🐉",
+            desc:"นักล่ามังกร",
+
+            passive:{
+                name:"Dragon Hunter",
+                desc:
+                "สร้าง Damage เพิ่ม +1d6 ต่อ Boss หรือศัตรูขนาดใหญ่"
+            },
+
+            skills:[
+
+                {
+                    id:"d5",
+                    name:"Dragon Breaker",
+                    icon:"🐲",
+                    type:"Physical",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"STR",
+                    damage:"2d6 + STR",
+                    effect:"x1.5 Damage ต่อ Boss",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"โจมตีจุดอ่อนของสัตว์ประหลาด"
+                },
+
+                {
+                    id:"d7",
+                    name:"Dragon Roar",
+                    icon:"📣",
+                    type:"AOE",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"STR",
+                    damage:"2d8 + STR",
+                    effect:"ศัตรูทั้งหมดติด Fear 1 รอบ",
+                    range:"รัศมี 20 ft รอบตัว",
+                    desc:"คำรามข่มขวัญศัตรู"
+                },
+
+                {
+                    id:"d10",
+                    name:"Dragonslayer",
+                    icon:"🐉",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"STR",
+                    damage:"6d8 + STR",
+                    effect:"Damage x2 ต่อ Dragon / Boss",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"ท่าไม้ตายสำหรับกำจัดมังกร"
+                }
+
+            ]
+        }
+
+    ],
+
+    skills:[
+
+        {
+            id:"w1",
+            name:"Reckless Cleave",
+            icon:"🪓",
+            type:"Physical",
+            reqLv:1,
+            cost:1,
+            modifier:"STR",
+            damage:"1d8 + STR",
+            effect:"Damage สูง แต่ AC ตัวเองลดลง 1 จนจบรอบ",
+            range:"ประชิดตัว (Melee 5 ft)",
+            desc:"ฟันอย่างรุนแรงโดยไม่สนใจการป้องกัน"
+        },
+
+        {
+            id:"w2",
+            name:"Shield Bash",
+            icon:"🛡️",
+            type:"Physical / Control",
+            reqLv:1,
+            cost:1,
+            modifier:"STR",
+            damage:"1d6 + STR",
+            effect:"เป้าหมายต้องทอย CON Saving Throw DC 8 ไม่งั้นจะติด Stun 1 รอบ",
+            range:"ประชิดตัว (Melee 5 ft)",
+            desc:"ใช้โล่กระแทกศัตรู"
+        },
+
+        {
+            id:"w3",
+            name:"Bastion Wall",
+            icon:"🏰",
+            type:"Defense",
+            reqLv:2,
+            cost:1,
+            modifier:"CON",
+            damage:"—",
+            effect:"+5 AC เป็นเวลา 1 รอบ",
+            range:"ตัวเอง (Self)",
+            desc:"ตั้งรับอย่างมั่นคง"
+        },
+
+        {
+            id:"w4",
+            name:"Battle Cry",
+            icon:"📢",
+            type:"Buff",
+            reqLv:3,
+            cost:2,
+            modifier:"CHA",
+            damage:"—",
+            effect:"สมาชิกทีม ATK +2 เป็นเวลา 2 รอบ",
+            range:"รัศมี 30 ft รอบตัว",
+            desc:"ปลุกใจเพื่อนร่วมทีม"
+        },
+
+        {
+            id:"w5",
+            name:"Reckless Charge",
+            icon:"💥",
+            type:"Physical",
+            reqLv:4,
+            cost:2,
+            modifier:"STR",
+            damage:"2d6 + STR",
+            effect:"Knockback เป้าหมาย",
+            range:"วิ่งเข้าปะทะ 20 ft แล้วโจมตีประชิด (Melee 5 ft)",
+            desc:"พุ่งเข้าโจมตีด้วยพลังทั้งหมด"
+        }
+
+    ]
+},
+
+/* =========================================================
+   MAGE
+========================================================= */
+
+{
+    id:"Mage",
+
+    th:"จอมเวทย์ฝึกหัด",
+
+    icon:"🔮",
+
+    role:"Magic / AOE / Support",
+
+    hpBase:8,
+    hpPerLevel:5,
+    hpConMult:1,
+
+    armor:{name:"Robes (ชุดคลุมเวท)",base:10,dexCap:5},
+    speed:30,
+
+    baseStats:{
+        STR:8,
+        DEX:12,
+        CON:10,
+        INT:16,
+        WIS:14,
+        CHA:12
+    },
+
+    saves:["INT","WIS"],
+
+    skillsProficient:[
+        "Arcana",
+        "History",
+        "Investigation",
+        "Insight"
+    ],
+
+    passive:{
+        name:"Arcane Economy",
+        desc:
+        "สกิลเวทมนตร์ของเมจทุกสกิลใช้ SP ลดลง 1 หน่วย (ขั้นต่ำ 1 SP เสมอ)"
+    },
+
+    subclasses:[
+
+        {
+            id:"Elementalist",
+            armor:{name:"Mage Armor (เกราะเวท 13+DEX)",base:13,dexCap:5},
+            name:"Elementalist",
+            icon:"🔥",
+            desc:"ผู้ควบคุมธาตุ",
+
+            passive:{
+                name:"Elemental Mastery",
+                desc:
+                "Magic Damage ของ Fire, Ice และ Lightning +2"
+            },
+
+            skills:[
+
+                {
+                    id:"e5",
+                    name:"Elemental Burst",
+                    icon:"🔥",
+                    type:"Magic AOE",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"INT",
+                    damage:"2d6 + INT",
+                    effect:"เลือก Fire / Ice / Lightning",
+                    range:"60 ft",
+                    desc:"ปล่อยพลังธาตุระเบิด"
+                },
+
+                {
+                    id:"e7",
+                    name:"Elemental Storm",
+                    icon:"🌪️",
+                    type:"Magic AOE",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"INT",
+                    damage:"3d6 + INT",
+                    effect:"โจมตีศัตรูทั้งหมด",
+                    range:"60 ft (รัศมีระเบิด 20 ft ที่จุดเป้าหมาย)",
+                    desc:"สร้างพายุธาตุ"
+                },
+
+                {
+                    id:"e10",
+                    name:"Cataclysm",
+                    icon:"☄️",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"INT",
+                    damage:"6d8 + INT",
+                    effect:"ติดสถานะตามธาตุ",
+                    range:"90 ft (รัศมีระเบิด 30 ft ที่จุดเป้าหมาย)",
+                    desc:"ปลดปล่อยพลังธาตุขั้นสูงสุด"
+                }
+
+            ]
+        },
+
+        {
+            id:"Necromancer",
+            armor:{name:"Bone Armor (เกราะกระดูก 12+DEX)",base:12,dexCap:5},
+            name:"Necromancer",
+            icon:"💀",
+            desc:"ผู้ใช้เวทแห่งความตาย",
+
+            passive:{
+                name:"Soul Harvest",
+                desc:
+                "เมื่อศัตรูตายจาก Magic Skill ฟื้น HP 3 และฟื้น SP 1 (ใช้ได้ทุก 2 รอบ)"
+            },
+
+            skills:[
+
+                {
+                    id:"n5",
+                    name:"Soul Drain",
+                    icon:"🩸",
+                    type:"Magic",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"INT/WIS",
+                    damage:"1d8 + INT/WIS (เลือกค่าสูงกว่า)",
+                    effect:"ฟื้น HP เท่ากับครึ่งหนึ่งของดาเมจที่สร้างได้ (ปัดลง)",
+                    range:"60 ft",
+                    desc:"ดูดพลังชีวิตของเป้าหมาย"
+                },
+
+                {
+                    id:"n7",
+                    name:"Raise Dead",
+                    icon:"☠️",
+                    type:"Summon",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"INT/WIS",
+                    damage:"—",
+                    effect:"เรียก Skeleton 1 ตัว 3 รอบ",
+                    range:"30 ft (จุดอัญเชิญ)",
+                    desc:"เรียกผู้ตายกลับมารับใช้"
+                },
+
+                {
+                    id:"n10",
+                    name:"Army of the Dead",
+                    icon:"💀",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"INT/WIS",
+                    damage:"4d8 + INT/WIS (เลือกค่าสูงกว่า)",
+                    effect:"เรียก Undead 3 ตัว",
+                    range:"60 ft (รัศมีระเบิด 20 ft ที่จุดเป้าหมาย)",
+                    desc:"ปลุกกองทัพคนตาย"
+                }
+
+            ]
+        },
+
+        {
+            id:"Spellblade",
+            armor:{name:"Arcane Breastplate (เกราะอกเวท)",base:14,dexCap:2},
+            name:"Spellblade",
+            icon:"⚔️",
+            desc:"นักดาบเวทมนตร์",
+
+            passive:{
+                name:"Arcane Weapon",
+                desc:
+                "การโจมตีปกติสามารถเพิ่ม Magic Damage +2 และนับเป็น Physical + Magic"
+            },
+
+            skills:[
+
+                {
+                    id:"sb5",
+                    name:"Magic Edge",
+                    icon:"✨",
+                    type:"Hybrid",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"STR + INT",
+                    damage:"1d6 + STR + INT",
+                    effect:"โจมตีครั้งนี้ได้ Advantage (เวทช่วยเล็งจุดอ่อนของเกราะ)",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"เคลือบดาบด้วยพลังเวท"
+                },
+
+                {
+                    id:"sb7",
+                    name:"Arcane Blade",
+                    icon:"⚡",
+                    type:"Hybrid AOE",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"STR + INT",
+                    damage:"2d8 + STR + INT",
+                    effect:"โจมตี 2 ครั้ง",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"ผสมพลังดาบและเวท"
+                },
+
+                {
+                    id:"sb10",
+                    name:"Astral Execution",
+                    icon:"🌌",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"STR + INT",
+                    damage:"5d8 + STR + INT",
+                    effect:"โจมตีครั้งนี้ได้ Advantage; ถ้าพลาด จะได้ SP คืนครึ่งหนึ่ง (ปัดขึ้น)",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"ดาบเวทมนตร์ขั้นสูงสุด"
+                }
+
+            ]
+        },
+
+        {
+            id:"Priest",
+            armor:{name:"Scale Mail + Shield (เกราะเกล็ด+โล่)",base:14,dexCap:2,shield:2},
+            name:"Priest",
+            icon:"✨",
+            desc:"นักบวชสายสนับสนุน",
+
+            passive:{
+                name:"Divine Grace",
+                desc:
+                "Healing Skill ฟื้น HP เพิ่ม 3 และเมื่อเพื่อน HP ต่ำกว่า 30% ได้รับ Healing +5"
+            },
+
+            skills:[
+
+                {
+                    id:"p5",
+                    name:"Holy Heal",
+                    icon:"💚",
+                    type:"Heal",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"WIS/CHA",
+                    damage:"Heal 2d6 + WIS/CHA (เลือกค่าสูงกว่า)",
+                    effect:"รักษาเพื่อน 1 คน",
+                    range:"30 ft",
+                    desc:"ฟื้นฟู HP ด้วยพลังศักดิ์สิทธิ์"
+                },
+
+                {
+                    id:"p7",
+                    name:"Holy Barrier",
+                    icon:"🪽",
+                    type:"Support",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"WIS/CHA",
+                    damage:"—",
+                    effect:"+6 AC เป็นเวลา 2 รอบ",
+                    range:"30 ft",
+                    desc:"สร้างเกราะศักดิ์สิทธิ์"
+                },
+
+                {
+                    id:"p10",
+                    name:"Divine Miracle",
+                    icon:"☀️",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"WIS/CHA",
+                    damage:"Heal 5d8 + WIS/CHA (เลือกค่าสูงกว่า)",
+                    effect:"ชุบชีวิตเพื่อน HP 0 ได้ 1 คน",
+                    range:"30 ft",
+                    desc:"ปาฏิหาริย์สูงสุด"
+                }
+
+            ]
+        }
+
+    ],
+
+    skills:[
+
+        {
+            id:"m1",
+            name:"Magic Missile",
+            icon:"✨",
+            type:"Magic",
+            reqLv:1,
+            cost:1,
+            modifier:"INT",
+            damage:"1d8 + INT",
+            effect:"โจมตีด้วย Advantage (กระสุนเวทพุ่งเข้าเป้าหมายแทบไม่พลาด)",
+            range:"60 ft",
+            desc:"ยิงกระสุนเวท"
+        },
+
+        {
+            id:"m2",
+            name:"Firebolt",
+            icon:"🔥",
+            type:"Magic",
+            reqLv:1,
+            cost:1,
+            modifier:"INT",
+            damage:"1d10 + INT",
+            effect:"เป้าหมายต้องทอย DEX Saving Throw DC 8 ไม่งั้นจะติด Burning (1d4 ไฟ ต่อเทิร์น) 2 รอบ",
+            range:"60 ft (ระเบิดรัศมี 10 ft ที่จุดโดน)",
+            desc:"ยิงเปลวไฟ"
+        },
+
+        {
+            id:"m3",
+            name:"Arcane Barrier",
+            icon:"🔷",
+            type:"Defense",
+            reqLv:2,
+            cost:1,
+            modifier:"INT",
+            damage:"—",
+            effect:"+6 AC ต่อการโจมตีเวทมนตร์ เป็นเวลา 1 รอบ",
+            range:"ตัวเองหรือพันธมิตรในระยะ 30 ft",
+            desc:"สร้างกำแพงพลังเวท"
+        },
+
+        {
+            id:"m4",
+            name:"Frost Nova",
+            icon:"❄️",
+            type:"Magic AOE",
+            reqLv:3,
+            cost:2,
+            modifier:"INT",
+            damage:"1d8 + INT",
+            effect:"เป้าหมายต้องทอย STR Saving Throw DC 8 ไม่งั้นความเร็วลดลง 15 ft เป็นเวลา 1 รอบ",
+            range:"รัศมี 15 ft รอบตัว",
+            desc:"ระเบิดน้ำแข็งรอบตัว"
+        },
+
+        {
+            id:"m5",
+            name:"Chain Lightning",
+            icon:"⚡",
+            type:"Magic AOE",
+            reqLv:4,
+            cost:2,
+            modifier:"INT",
+            damage:"2d6 + INT",
+            effect:"กระโดดไปเป้าหมายที่สอง",
+            range:"60 ft (กระโดดหาเป้าถัดไปในระยะ 15 ft)",
+            desc:"สายฟ้าโจมตีหลายเป้าหมาย"
+        }
+
+    ]
+},
+
+/* =========================================================
+   ROGUE
+========================================================= */
+
+{
+    id:"Rogue",
+
+    th:"มือสังหารมือใหม่",
+
+    icon:"🗡️",
+
+    role:"Speed / Assassin / Weak Point",
+
+    hpBase:10,
+    hpPerLevel:6,
+    hpConMult:1,
+
+    armor:{name:"Leather (เกราะหนัง)",base:11,dexCap:5},
+    speed:35,
+
+    baseStats:{
+        STR:10,
+        DEX:16,
+        CON:12,
+        INT:10,
+        WIS:12,
+        CHA:12
+    },
+
+    saves:["DEX","INT"],
+
+    skillsProficient:[
+        "Stealth",
+        "Acrobatics",
+        "Sleight of Hand",
+        "Perception"
+    ],
+
+    passive:{
+        name:"Sneak Attack",
+        desc:
+        "เมื่อโจมตีจากสถานะ Stealth, จากด้านหลัง, หรือเป้าหมายติด Debuff อยู่ จะได้ดาเมจเพิ่ม +2d6 (Lv.1-5) หรือ +4d6 (Lv.6-10) ทุกครั้งที่เข้าเงื่อนไข"
+    },
+
+    subclasses:[
+
+        {
+            id:"Assassin",
+            armor:{name:"Studded Leather (หนังหุ้มหมุด)",base:12,dexCap:5},
+            name:"Assassin",
+            icon:"☠️",
+            desc:"นักฆ่าที่กำจัดเป้าหมายอย่างรวดเร็ว",
+
+            passive:{
+                name:"Killer Instinct",
+                desc:
+                "เมื่อโจมตีเป้าหมาย HP ต่ำกว่า 50% ช่วง Critical กว้างขึ้นเป็น 18–20"
+            },
+
+            skills:[
+
+                {
+                    id:"a5",
+                    name:"Assassinate",
+                    icon:"☠️",
+                    type:"Physical",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"DEX",
+                    damage:"2d8 + DEX",
+                    effect:"Damage x2 ถ้าเป้าหมาย HP <30%",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"โจมตีจุดตาย"
+                },
+
+                {
+                    id:"a7",
+                    name:"Death Mark",
+                    icon:"🎯",
+                    type:"Debuff",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"DEX",
+                    damage:"1d6 + DEX",
+                    effect:"เป้าหมายรับดาเมจเพิ่ม +2 ทุกครั้งที่โดนโจมตี เป็นเวลา 3 รอบ",
+                    range:"60 ft",
+                    desc:"ทำเครื่องหมายเป้าหมาย"
+                },
+
+                {
+                    id:"a10",
+                    name:"Instant Death",
+                    icon:"💀",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"DEX",
+                    damage:"6d10 + DEX",
+                    effect:"ถ้าเป้าหมาย HP ≤20% เป้าหมายต้องทอย CON Saving Throw DC 8 แบบ Disadvantage ไม่งั้นจะถูกสังหารทันที",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"การโจมตีเพื่อสังหารทันที"
+                }
+
+            ]
+        },
+
+        {
+            id:"Trickster",
+            armor:{name:"Cloak of Tricks (เสื้อคลุมลวงตา)",base:11,dexCap:5,bonus:1},
+            name:"Trickster",
+            icon:"🎭",
+            desc:"นักเล่นกลและกับดัก",
+
+            passive:{
+                name:"Dirty Fighter",
+                desc:
+                "ศัตรูที่ติด Debuff จะได้รับ Damage จากคุณเพิ่ม +2 ทุกครั้ง"
+            },
+
+            skills:[
+
+                {
+                    id:"t5",
+                    name:"Flash Trap",
+                    icon:"💥",
+                    type:"Trap",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"DEX/CHA",
+                    damage:"1d8 + DEX/CHA (เลือกค่าสูงกว่า)",
+                    effect:"Stun 1 รอบ",
+                    range:"30 ft (วางกับดัก, รัศมี 10 ft)",
+                    desc:"วางกับดักระเบิด"
+                },
+
+                {
+                    id:"t7",
+                    name:"Mirror Image",
+                    icon:"👥",
+                    type:"Utility",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"DEX/CHA",
+                    damage:"—",
+                    effect:"การโจมตีครั้งถัดไปที่โดนตัวเอง ให้ศัตรูทอย Attack Roll แบบ Disadvantage",
+                    range:"ตัวเอง (Self)",
+                    desc:"สร้างภาพลวงตา"
+                },
+
+                {
+                    id:"t10",
+                    name:"Grand Deception",
+                    icon:"🎭",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"DEX/CHA",
+                    damage:"3d8 + DEX/CHA (เลือกค่าสูงกว่า)",
+                    effect:"ศัตรูทั้งหมด Confuse 2 รอบ",
+                    range:"รัศมี 20 ft รอบตัว",
+                    desc:"สร้างภาพลวงตาขนาดใหญ่"
+                }
+
+            ]
+        },
+
+        {
+            id:"Archer",
+            armor:{name:"Light Leather (หนังเบา)",base:11,dexCap:5},
+            name:"Archer",
+            icon:"🏹",
+            desc:"นักธนูระยะไกล",
+
+            passive:{
+                name:"Eagle Eye",
+                desc:
+                "Ranged Attack Accuracy +2 และ Critical ที่ 19–20"
+            },
+
+            skills:[
+
+                {
+                    id:"ar5",
+                    name:"Piercing Arrow",
+                    icon:"🏹",
+                    type:"Ranged",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"DEX",
+                    damage:"2d6 + DEX",
+                    effect:"เจาะจุดอ่อนเกราะ ทำให้การโจมตีเป้าหมายนี้จากทุกคนได้ Advantage จนจบเทิร์นนี้",
+                    range:"150 ft",
+                    desc:"ลูกศรเจาะเกราะ"
+                },
+
+                {
+                    id:"ar7",
+                    name:"Rain of Arrows",
+                    icon:"🌧️",
+                    type:"Ranged AOE",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"DEX",
+                    damage:"3d6 + DEX",
+                    effect:"โจมตีศัตรูทั้งหมด",
+                    range:"150 ft (รัศมีตก 20 ft ที่จุดเป้าหมาย)",
+                    desc:"ฝนลูกศร"
+                },
+
+                {
+                    id:"ar10",
+                    name:"Heaven's Volley",
+                    icon:"☄️",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"DEX",
+                    damage:"6d8 + DEX",
+                    effect:"x1.5 Damage เมื่อ Critical",
+                    range:"150 ft",
+                    desc:"ฝนธนูจากฟากฟ้า"
+                }
+
+            ]
+        },
+
+        {
+            id:"Ninja",
+            armor:{name:"Shadow Garb (ไร้เกราะ 10+DEX+WIS, DEX/WIS สูงสุด +5 แต่ละตัว)",base:10,dexCap:5,extra:"WIS",extraCap:5},
+            hpBonusPerLevel:1,
+            name:"Ninja",
+            icon:"🥷",
+            desc:"นักรบเงา",
+
+            passive:{
+                name:"Shadow Dance",
+                desc:
+                "หลังใช้ Skill ที่สร้างความเสียหายสำเร็จ 2 ครั้งติดกัน จะเข้าสู่ Shadow State ทำให้ Skill ถัดไปไม่ถูก Counter"
+            },
+
+            skills:[
+
+                {
+                    id:"ni5",
+                    name:"Shadow Clone",
+                    icon:"👤",
+                    type:"Utility",
+                    reqLv:5,
+                    cost:2,
+                    modifier:"DEX",
+                    damage:"—",
+                    effect:"หลบการโจมตีครั้งถัดไป 1 ครั้ง",
+                    range:"ตัวเอง (Self)",
+                    desc:"สร้างร่างเงา"
+                },
+
+                {
+                    id:"ni7",
+                    name:"Shuriken Storm",
+                    icon:"⭐",
+                    type:"Ranged AOE",
+                    reqLv:7,
+                    cost:3,
+                    modifier:"DEX",
+                    damage:"3d6 + DEX",
+                    effect:"โจมตีสูงสุด 3 เป้าหมาย",
+                    range:"30 ft (ขว้าง, สูงสุด 3 เป้าหมาย)",
+                    desc:"ขว้างดาวกระจาย"
+                },
+
+                {
+                    id:"ni10",
+                    name:"Night Reaper",
+                    icon:"🌑",
+                    type:"Ultimate",
+                    reqLv:10,
+                    cost:4,
+                    modifier:"DEX",
+                    damage:"5d10 + DEX",
+                    effect:"โจมตีด้านหลัง Damage x2",
+                    range:"ประชิดตัว (Melee 5 ft)",
+                    desc:"ฟันศัตรูจากเงามืด"
+                }
+
+            ]
+        }
+
+    ],
+
+    skills:[
+
+        {
+            id:"r1",
+            name:"Quick Dagger",
+            icon:"🗡️",
+            type:"Physical",
+            reqLv:1,
+            cost:1,
+            modifier:"DEX",
+            damage:"1d6 + DEX",
+            effect:"Critical สามารถโจมตีต่อ",
+            range:"ประชิดตัว (Melee 5 ft)",
+            desc:"แทงอย่างรวดเร็ว"
+        },
+
+        {
+            id:"r2",
+            name:"Poison Dart",
+            icon:"☠️",
+            type:"Ranged / Debuff",
+            reqLv:1,
+            cost:1,
+            modifier:"DEX",
+            damage:"1d6 + DEX",
+            effect:"ติด Poison 2 รอบ",
+            range:"20/60 ft (ขว้าง)",
+            desc:"ยิงลูกดอกอาบพิษ"
+        },
+
+        {
+            id:"r3",
+            name:"Shadow Step",
+            icon:"🌑",
+            type:"Utility",
+            reqLv:2,
+            cost:1,
+            modifier:"DEX",
+            damage:"—",
+            effect:"เคลื่อนที่ 15 ฟุต และได้ Advantage ในการทอยหลบหลีก (DEX Saving Throw) ครั้งถัดไป",
+            range:"ตัวเอง (เคลื่อนที่ 15 ft)",
+            desc:"เคลื่อนที่ผ่านเงา"
+        },
+
+        {
+            id:"r4",
+            name:"Smoke Bomb",
+            icon:"💨",
+            type:"Utility",
+            reqLv:3,
+            cost:2,
+            modifier:"DEX",
+            damage:"—",
+            effect:"ศัตรูในพื้นที่ควันต้องทอย WIS Saving Throw DC 8 ไม่งั้นจะโจมตีด้วย Disadvantage เป็นเวลา 1 รอบ",
+            range:"30 ft (จุดเป้าหมาย, รัศมีควัน 20 ft)",
+            desc:"ปล่อยควันบดบังสนามรบ"
+        },
+
+        {
+            id:"r5",
+            name:"Fatal Ambush",
+            icon:"🗡️",
+            type:"Physical",
+            reqLv:4,
+            cost:2,
+            modifier:"DEX",
+            damage:"2d6 + DEX",
+            effect:"Damage x2 เมื่อโจมตีจากด้านหลัง",
+            range:"ประชิดตัว (Melee 5 ft)",
+            desc:"ซุ่มโจมตีจุดอ่อน"
+        }
+
+    ]
+}
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+/* =========================================================
+   BASE SKILL UPGRADES (per subclass)
+
+   เมื่อเลือก Subclass แล้ว สกิลหลักของคลาส (w1-w5 / m1-m5 / r1-r5)
+   จะถูกปรับตัวเลข/เอฟเฟกต์ให้เข้ากับธีมของสายย่อยนั้น
+   โดย "สล็อตเดิม" (ชื่อ/ไอคอน/ประเภท/เลเวล/ราคา SP) ยังคงเดิมเสมอ
+   จะเห็นเวอร์ชันอัพเกรดนี้ก็ต่อเมื่อเลือก Subclass แล้วเท่านั้น
+========================================================= */
+
+const BASE_SKILL_UPGRADES = {
+
+    /* ---------- WARRIOR ---------- */
+
+    Berserker:{
+        w1:{ damage:"1d10 + STR", effect:"Damage สูงขึ้น และไม่มี DEF ลด (ไม่สนใจการป้องกันตัวเอง)", desc:"ฟันดะด้วยความบ้าคลั่ง ไม่สนใจแม้แต่ตัวเอง" },
+        w2:{ damage:"1d8 + STR", effect:"เป้าหมายต้องทอย CON Saving Throw DC 8 ไม่งั้นจะติด Stun 1 รอบ และตัวเองได้ Physical Damage +2 ในเทิร์นถัดไป", desc:"กระแทกด้วยกำปั้นเปล่าอย่างดุดัน" },
+        w3:{ effect:"+3 AC เป็นเวลา 1 รอบ และได้รับ Blood Fury Stack ทันที", desc:"เกร็งกล้ามรับแรงกระแทกแทนการตั้งรับ" },
+        w4:{ effect:"สมาชิกทีม ATK +2 เป็นเวลา 2 รอบ และตัวเอง ATK +4", desc:"คำรามปลุกเร้าความบ้าคลั่งของตัวเอง" },
+        w5:{ damage:"2d8 + STR", effect:"Knockback เป้าหมาย และ x1.5 Damage ถ้า HP ตัวเองต่ำกว่า 50%", desc:"พุ่งเข้าชนด้วยพลังดิบเต็มร้อย" }
+    },
+
+    Guardian:{
+        w1:{ effect:"Damage สูง แต่ไม่มี DEF ลด (คุมจังหวะได้มั่นคง)", desc:"ฟันอย่างมีสติ ไม่เสียการ์ด" },
+        w2:{ modifier:"STR/CON", damage:"1d8 + STR/CON", effect:"เป้าหมายต้องทอย CON Saving Throw DC 8 ไม่งั้นจะติด Stun 1 รอบ", desc:"ใช้โล่หนักกระแทกจนศัตรูเซ" },
+        w3:{ effect:"+7 AC เป็นเวลา 2 รอบ", desc:"ตั้งกำแพงโล่แน่นหนาราวป้อมปราการ" },
+        w4:{ effect:"สมาชิกทีม DEF +2 เป็นเวลา 2 รอบ (แทน ATK)", desc:"ปลุกใจให้ทุกคนตั้งการ์ดมั่นคง" },
+        w5:{ effect:"Knockback เป้าหมาย และดึงดูดศัตรูให้โจมตีตัวเอง 1 รอบ (Taunt)", desc:"พุ่งเข้าปกป้องแนวหน้าด้วยร่างกายตัวเอง" }
+    },
+
+    Samurai:{
+        w1:{ modifier:"STR/DEX", damage:"1d8 + STR/DEX", effect:"Damage สูง แต่ DEF -1 จนจบรอบ, Critical เมื่อทอยได้ 19–20", desc:"ฟันด้วยความแม่นยำแบบนักดาบ" },
+        w2:{ modifier:"STR/DEX", damage:"1d6 + STR/DEX", effect:"เป้าหมายต้องทอย CON Saving Throw DC 8 ไม่งั้นจะติด Stun 1 รอบ; ถ้าเป้าหมายพลาดการโจมตีใส่ตัวเอง จะได้ Counter ทันที", desc:"ใช้ด้ามดาบสะกิดจังหวะศัตรู" },
+        w3:{ effect:"+5 AC เป็นเวลา 1 รอบ และ Attack Roll ครั้งถัดไปได้ Advantage", desc:"ตั้งท่ารับแบบซามุไร รอจังหวะโต้กลับ" },
+        w4:{ effect:"สมาชิกทีม ATK +2 เป็นเวลา 2 รอบ และตัวเอง Attack Roll ได้ Advantage ในเทิร์นถัดไป", desc:"ตะโกนคำรามแบบนักรบบูชิโด" },
+        w5:{ modifier:"STR/DEX", damage:"2d6 + STR/DEX", effect:"Knockback เป้าหมาย และการโจมตีครั้งถัดไปใส่เป้าหมายนี้ได้ Advantage", desc:"พุ่งฟันด้วยความเร็วสายฟ้าแลบ" }
+    },
+
+    DragonSlayer:{
+        w1:{ effect:"Damage สูง แต่ DEF -1 จนจบรอบ, +1d4 Damage ต่อ Boss หรือศัตรูขนาดใหญ่", desc:"ฟันเจาะเกล็ดหนาของสัตว์ประหลาด" },
+        w2:{ effect:"เป้าหมายต้องทอย CON Saving Throw DC 8 ไม่งั้นจะติด Stun 1 รอบ", desc:"กระแทกโล่สะเทือนแม้แต่สัตว์ร้ายตัวใหญ่" },
+        w3:{ effect:"+5 AC เป็นเวลา 1 รอบ, และ AC +2 เพิ่มเติมเมื่อเจอ Boss หรือศัตรูขนาดใหญ่", desc:"ตั้งรับอย่างเขี้ยวแกร่งทนแรงจากสัตว์ร้าย" },
+        w4:{ effect:"สมาชิกทีม ATK +2 เป็นเวลา 2 รอบ (+3 เมื่อสู้กับ Boss)", desc:"คำรามท้าทายสัตว์ประหลาดตัวใหญ่" },
+        w5:{ effect:"Knockback เป้าหมาย, +1d6 Damage ต่อ Boss หรือศัตรูขนาดใหญ่", desc:"พุ่งชนด้วยพลังสังหารมังกร" }
+    },
+
+    /* ---------- MAGE ---------- */
+
+    Elementalist:{
+        m1:{ damage:"1d10 + INT", effect:"โจมตีด้วย Advantage, เลือกธาตุ Fire/Ice/Lightning ได้", desc:"ยิงกระสุนธาตุที่เลือกได้" },
+        m2:{ damage:"1d12 + INT", effect:"เป้าหมายต้องทอย DEX Saving Throw DC 8 ไม่งั้นจะติด Burning (1d4 ไฟ ต่อเทิร์น) 2 รอบ, +1d4 Damage ถ้าเป้าหมายติดสถานะธาตุอยู่แล้ว", desc:"ยิงเปลวไฟที่ลุกโชนรุนแรงขึ้น" },
+        m3:{ effect:"+6 AC ต่อการโจมตีเวทมนตร์ เป็นเวลา 1 รอบ และสะท้อนดาเมจกลับ 1d4", desc:"กำแพงเวทที่แข็งแกร่งขึ้นจากความเชี่ยวชาญธาตุ" },
+        m4:{ effect:"เป้าหมายต้องทอย STR Saving Throw DC 8 ไม่งั้นความเร็วลดลง 15 ft เป็นเวลา 1 รอบ, +1d6 Damage ถ้าเป้าหมายติดสถานะธาตุอยู่แล้ว", desc:"ระเบิดน้ำแข็งที่หนาวจัดกว่าเดิม" },
+        m5:{ damage:"2d8 + INT", effect:"กระโดดไปเป้าหมายที่สองและสาม (เป้าหมายที่สามดาเมจลดลง 1d4)", desc:"สายฟ้าที่ทรงพลังกว่าเดิม กระโดดได้ไกลขึ้น" }
+    },
+
+    Necromancer:{
+        m1:{ modifier:"INT/WIS", damage:"1d8 + INT/WIS", effect:"โจมตีด้วย Advantage และฟื้น HP ตัวเอง 2", desc:"ยิงกระสุนวิญญาณที่ดูดพลังชีวิต" },
+        m2:{ modifier:"INT/WIS", damage:"1d10 + INT/WIS", effect:"ติดสถานะ Necrotic Burn แทน Burning", desc:"เปลวไฟมรณะที่เผาผลาญวิญญาณ" },
+        m3:{ effect:"+6 AC ต่อการโจมตีเวทมนตร์ เป็นเวลา 1 รอบ และฟื้น HP ตัวเอง 2 ทุกครั้งที่ถูกโจมตีด้วยเวทระหว่างนี้", desc:"กำแพงเวทจากพลังงานความตาย" },
+        m4:{ effect:"เป้าหมายต้องทอย STR Saving Throw DC 8 ไม่งั้นความเร็วลดลง 15 ft เป็นเวลา 1 รอบ และดูดพลังชีวิตเป้าหมาย ฟื้น HP ตัวเอง 2", desc:"ความเย็นแห่งหลุมศพที่แช่แข็งวิญญาณ" },
+        m5:{ effect:"กระโดดไปเป้าหมายที่สอง และฟื้น HP ตัวเอง 1 ต่อเป้าหมายที่โดน", desc:"สายฟ้าวิญญาณที่เชื่อมโยงความตาย" }
+    },
+
+    Spellblade:{
+        m1:{ modifier:"STR + INT", damage:"1d8 + STR + INT", effect:"โจมตีด้วย Advantage", desc:"ยิงกระสุนเวทที่ผนึกพลังดาบ" },
+        m2:{ modifier:"STR + INT", damage:"1d10 + STR + INT", effect:"เป้าหมายต้องทอย DEX Saving Throw DC 8 ไม่งั้นจะติด Burning (1d4 ไฟ ต่อเทิร์น) 2 รอบ", desc:"เปลวไฟที่เคลือบคมดาบ" },
+        m3:{ effect:"+6 AC ต่อการโจมตีเวทมนตร์ และ +2 AC ทั่วไป เป็นเวลา 1 รอบ", desc:"กำแพงเวทที่ผสานพลังกายและเวท" },
+        m4:{ damage:"1d6 + STR + INT", effect:"เป้าหมายต้องทอย STR Saving Throw DC 8 ไม่งั้นความเร็วลดลง 15 ft เป็นเวลา 1 รอบ", desc:"ระเบิดน้ำแข็งจากคมดาบเวท" },
+        m5:{ modifier:"STR + INT", damage:"2d6 + STR + INT", effect:"กระโดดไปเป้าหมายที่สอง", desc:"สายฟ้าที่พุ่งผ่านปลายดาบ" }
+    },
+
+    Priest:{
+        m1:{ modifier:"WIS/CHA", damage:"1d8 + WIS/CHA (Radiant)", effect:"โจมตีด้วย Advantage, ดาเมจเปลี่ยนเป็นศักดิ์สิทธิ์ (Radiant)", desc:"ยิงลำแสงศักดิ์สิทธิ์แทนกระสุนเวท" },
+        m2:{ modifier:"WIS/CHA", damage:"1d6 + WIS/CHA", effect:"แทน Burning ด้วย Radiant: ฟื้น HP ให้พันธมิตรใกล้เคียง 1d4", desc:"เปลวไฟศักดิ์สิทธิ์ที่เยียวยาฝ่ายเดียวกัน" },
+        m3:{ effect:"+6 AC (ทุกชนิดความเสียหาย) เป็นเวลา 1 รอบ ให้พันธมิตร 1 คนด้วย", desc:"เกราะศักดิ์สิทธิ์ปกป้องทั้งตัวเองและเพื่อน" },
+        m4:{ effect:"เป้าหมายต้องทอย STR Saving Throw DC 8 ไม่งั้นความเร็วลดลง 15 ft เป็นเวลา 1 รอบ และฟื้น HP ตัวเอง 1d4", desc:"ไอเย็นศักดิ์สิทธิ์ที่ให้พลังนักบวช" },
+        m5:{ effect:"กระโดดไปเป้าหมายที่สอง; ถ้าเป้าหมายเป็นพันธมิตรจะฟื้น HP แทนทำดาเมจ", desc:"พลังงานศักดิ์สิทธิ์ที่เลือกทำร้ายหรือรักษาได้" }
+    },
+
+    /* ---------- ROGUE ---------- */
+
+    Assassin:{
+        r1:{ damage:"1d8 + DEX", effect:"Critical สามารถโจมตีต่อ และ x1.5 Damage เมื่อ Critical จาก Stealth", desc:"แทงอย่างรวดเร็วและเงียบกริบ" },
+        r2:{ effect:"ติด Poison 3 รอบ (เพิ่มจาก 2)", desc:"ยิงลูกดอกอาบพิษเข้มข้นกว่าเดิม" },
+        r3:{ effect:"ย้ายตำแหน่งและเข้าสู่สถานะ Stealth ทันที", desc:"เคลื่อนที่ผ่านเงาเข้าสู่ความมืด" },
+        r4:{ effect:"ศัตรูในพื้นที่ควันต้องทอย WIS Saving Throw DC 8 ไม่งั้นจะโจมตีด้วย Disadvantage เป็นเวลา 1 รอบ และตัวเองเข้า Stealth ทันที", desc:"ปล่อยควันแล้วหายตัวเข้าเงา" },
+        r5:{ damage:"3d6 + DEX", effect:"Damage x2 เมื่อโจมตีจากด้านหลัง หรือจาก Stealth", desc:"ซุ่มโจมตีจุดอ่อนอย่างเชี่ยวชาญ" }
+    },
+
+    Trickster:{
+        r1:{ effect:"Critical สามารถโจมตีต่อ และเป้าหมายเสียการทรงตัว (Disadvantage ครั้งถัดไป)", desc:"แทงหลอกล่อก่อนจะจิ้มจริง" },
+        r2:{ effect:"ติด Poison 2 รอบ และลด Damage ที่เป้าหมายสร้างได้ -1 ระหว่างติดพิษ", desc:"ยิงลูกดอกเคลือบสารหลอนประสาท" },
+        r3:{ effect:"เคลื่อนที่ 15 ฟุต และได้ Advantage ในการทอยหลบหลีกครั้งถัดไป, ทิ้งภาพลวงตาไว้แทนที่ 1 ครั้ง", desc:"เคลื่อนที่ผ่านเงาพร้อมทิ้งภาพลวง" },
+        r4:{ effect:"ศัตรูในพื้นที่ควันต้องทอย WIS Saving Throw DC 8 ไม่งั้นจะโจมตีด้วย Disadvantage และสับสนทิศทางเล็กน้อย (Confuse) เป็นเวลา 1 รอบ", desc:"ปล่อยควันสีสันหลอนตาศัตรู" },
+        r5:{ modifier:"DEX/CHA", damage:"2d6 + DEX/CHA", effect:"Damage x2 เมื่อโจมตีจากด้านหลัง", desc:"ซุ่มโจมตีด้วยกลลวงที่คาดไม่ถึง" }
+    },
+
+    Archer:{
+        r1:{ effect:"Critical สามารถโจมตีต่อ และใช้โจมตีระยะไกลได้ด้วย", desc:"แทงอย่างรวดเร็วในระยะประชิด (ใช้เป็นอาวุธสำรอง)" },
+        r2:{ damage:"1d8 + DEX", effect:"ติด Poison 2 รอบ และยิงได้ระยะไกลขึ้น", desc:"ยิงลูกดอกพิษด้วยความแม่นยำสูง" },
+        r3:{ effect:"เคลื่อนที่ 15 ฟุต และได้ Advantage ในการทอยหลบหลีกครั้งถัดไป, เปิดมุมยิงใหม่ทันที", desc:"ขยับตำแหน่งหาจุดยิงที่ดีที่สุด" },
+        r4:{ effect:"ศัตรูในพื้นที่ควันต้องทอย WIS Saving Throw DC 8 ไม่งั้นจะโจมตีด้วย Disadvantage เป็นเวลา 1 รอบ, ส่วนตัวเองยิงจากในควันได้แม่นยำปกติ", desc:"ปล่อยควันบังตัวเองแต่ยังมองเห็นเป้าหมาย" },
+        r5:{ damage:"2d8 + DEX", effect:"Damage x2 เมื่อโจมตีจากด้านหลัง หรือเป้าหมายไม่ทันระวังตัว", desc:"ยิงธนูเข้าจุดอ่อนจากระยะไกล" }
+    },
+
+    Ninja:{
+        r1:{ effect:"Critical สามารถโจมตีต่อ และไม่ส่งเสียงจนศัตรูไม่รู้ตัว", desc:"แทงอย่างเงียบกริบแบบนินจา" },
+        r2:{ effect:"เป้าหมายต้องทอย CON Saving Throw DC 8 ไม่งั้นจะติด Poison 2 รอบ และตัวเองเข้าสู่ Shadow State ทันที", desc:"ยิงลูกดอกพิษจากเงามืด" },
+        r3:{ effect:"เคลื่อนที่ 15 ฟุต และได้ Advantage ในการทอยหลบหลีกครั้งถัดไป, ทิ้งระเบิดควันเล็กไว้ตอนหายตัว", desc:"เคลื่อนที่ผ่านเงาแบบนินจาผู้เชี่ยวชาญ" },
+        r4:{ effect:"ศัตรูในพื้นที่ควันต้องทอย WIS Saving Throw DC 8 ไม่งั้นจะโจมตีด้วย Disadvantage เป็นเวลา 1 รอบ และตัวเองได้ขยับตำแหน่งฟรีทันที", desc:"ปล่อยควันแล้วเปลี่ยนตำแหน่งทันที" },
+        r5:{ damage:"2d8 + DEX", effect:"Damage x2 เมื่อโจมตีจากด้านหลัง, เข้า Shadow State ถ้าสังหารสำเร็จ", desc:"ฟันศัตรูจากเงาอย่างไร้ร่องรอย" }
+    }
+
+};
+
+
+let currentClassId="Warrior";
+
+let currentSkillFilter="all";
+
+let selectedSubclass=null;
+
+/* =========================================================
+   RACES
+========================================================= */
+
+const RACES=[
+{id:"Human",th:"มนุษย์",icon:"🧑",bonus:{DEX:1,WIS:1},auto:true,
+ passive:{name:"Adaptability",desc:"เมื่อได้รับ Stat point จากการอัพเลเวล จะได้รับเพิ่มเป็น 3 แต้ม (จำกัด 1 ครั้ง/เทิร์น)"}},
+{id:"Elf",th:"เอลฟ์",icon:"🧝",bonus:{DEX:2,INT:1},
+ passive:{name:"ความพยายาม",desc:"เมื่อทอยลูกเต๋า หากผลทอยบนลูกเต๋าเป็น 1 สามารถทอยใหม่ได้ 1 ครั้ง (1 ครั้งต่อวัน)"}},
+{id:"Dwarf",th:"คนแคระ",icon:"🧔",bonus:{CON:2,STR:1},
+ passive:{name:"ใจเหล็ก",desc:"เมื่อได้รับ Damage จากการโจมตีเป็นครั้งแรกของการต่อสู้ ลด Damage ที่ได้รับลง 50%"}},
+{id:"Beastfolk",th:"เผ่าสัตว์",icon:"🐺",bonus:{DEX:1,WIS:2,CON:3},
+ passive:{name:"กลิ่นเลือด",desc:"จมูกดีสุดๆ"}},
+{id:"Oni",th:"ยักษ์อสูร",icon:"👹",bonus:{STR:2,CON:1},
+ passive:{name:"โมโหโมโห",desc:"เมื่อ HP ของตนเองเหลือ 50% หรือต่ำกว่า การโจมตีครั้งแรกของแต่ละเทิร์นสร้าง Damage เพิ่ม +3"}},
+{id:"Vampire",th:"แวมไพร์",icon:"🧛",bonus:{DEX:1,CHA:2},
+ passive:{name:"หิวเลือด",desc:"เมื่อโจมตีสำเร็จ สามารถฟื้นฟู HP 2 หน่วย"}},
+{id:"Dragonkin",th:"เผ่ามังกร",icon:"🐲",bonus:{STR:1,CHA:2},auto:true,
+ passive:{name:"ตัวใหญ่",desc:"เพิ่ม Max Skill Point เป็น 7"}},
+{id:"Gnome",th:"โนม",icon:"🔧",bonus:{INT:2,DEX:1},
+ passive:{name:"รีมานา",desc:"เมื่อใช้ Skill ที่มีค่าใช้จ่าย 1 SP และ Skill นั้นใช้งานสำเร็จ สามารถได้รับ SP คืน 1 SP"}},
+{id:"Demon",th:"ปีศาจ",icon:"😈",bonus:{CHA:2,STR:1,CON:3},
+ passive:{name:"เท่าเทียม",desc:"ใช้ HP 10% แทน Skill Point 1 Skill Point ได้"}},
+{id:"Dryad",th:"ดรายแอด",icon:"🌿",bonus:{WIS:2,INT:1},
+ passive:{name:"รักธรรมชาติ",desc:"เมื่ออยู่ในพื้นที่ธรรมชาติและใช้ Skill การโจมตีและการฟื้นฟู +2"}},
+{id:"Lizardfolk",th:"เผ่ากิ้งก่า",icon:"🦎",bonus:{CON:2,WIS:1},auto:true,
+ passive:{name:"วิ่งได้เร็วขึ้น",desc:"Speed เพิ่ม +5 ft"}}
+];
+
+let currentRaceId="Human";
+
+function getRace(){
+    return RACES.find(r=>r.id===currentRaceId);
+}
+
+function baseStatsFor(c){
+    const s={...c.baseStats};
+    Object.entries(getRace().bonus).forEach(([k,v])=>{ s[k]+=v; });
+    return s;
+}
+
+function baseMaxSP(){
+    return currentRaceId==="Dragonkin"?7:5;
+}
+
+function pointsPerMilestone(){
+    return currentRaceId==="Human"?3:STAT_POINTS_PER_MILESTONE;
+}
+
+function selectRace(id){
+    currentRaceId=id;
+    resetLevel();
+}
+
+function renderRace(){
+    const sel=document.getElementById("raceSelect");
+    sel.innerHTML=RACES.map(r=>
+        `<option value="${r.id}"${r.id===currentRaceId?" selected":""}>${r.icon} ${r.th}</option>`
+    ).join("");
+    document.getElementById("raceBonus").textContent=
+        Object.entries(getRace().bonus).map(([k,v])=>k+" +"+v).join(" · ");
+}
+
+
+let charState={
+
+    name:"ผู้กล้าอาเรีย",
+
+    level:1,
+
+    points:0,
+
+    sp:5,
+
+    maxSP:5,
+
+    armorTier:0,
+
+    weaponTier:0,
+
+    stats:{}
+
+};
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function getClass(){
+
+    return CLASSES_DATA.find(
+        c=>c.id===currentClassId
+    );
+
+}
+
+
+function effectiveCost(skill){
+
+    if(typeof skill.cost!=="number") return skill.cost;
+
+    if(currentClassId==="Mage") return Math.max(1, skill.cost-1);
+
+    return skill.cost;
+
+}
+
+
+function calcModVal(score){
+
+    return Math.floor(
+        (score-10)/2
+    );
+
+}
+
+
+function calcModStr(score){
+
+    const mod=calcModVal(score);
+
+    return mod>=0
+        ? "+"+mod
+        : String(mod);
+
+}
+
+
+function getProficiencyBonus(){
+
+    return Math.floor(
+        (charState.level-1)/4
+    )+2;
+
+}
+
+
+function calcMaxHP(){
+
+    const c=getClass();
+
+    const conMod=
+        calcModVal(
+            charState.stats.CON
+        );
+
+    let subBonus=0;
+
+    if(selectedSubclass){
+
+        const sub=c.subclasses.find(
+            x=>x.id===selectedSubclass
+        );
+
+        if(sub && sub.hpBonusPerLevel)
+            subBonus=sub.hpBonusPerLevel*charState.level;
+
+    }
+
+    return Math.max(
+        1,
+
+        c.hpBase+
+
+        conMod*c.hpConMult+
+
+        (
+            (charState.level-1)*
+            (c.hpPerLevel+conMod)
+        )+
+
+        subBonus
+    );
+
+}
+
+
+function getArmor(){
+
+    const c=getClass();
+
+    if(selectedSubclass){
+
+        const sub=c.subclasses.find(
+            x=>x.id===selectedSubclass
+        );
+
+        if(sub && sub.armor)
+            return sub.armor;
+
+    }
+
+    return c.armor;
+
+}
+
+
+/* =========================================================
+   EQUIPMENT DATA  (3 tiers: เริ่มต้น / กลาง / สูง)
+========================================================= */
+
+const TIER_LABELS=["เริ่มต้น","กลาง","สูง"];
+
+const TIER_LEVELS=[1,4,8];
+
+const WEAPON_TIER_BONUS=[0,1,2];
+
+/* [ชื่อเกราะ, ค่าเกราะฐาน] — ชนิดเกราะ (จำกัด DEX/โล่/โบนัส) อยู่ที่ armor ของ Class/Subclass */
+const ARMOR_TIERS={
+
+    Warrior:[
+        ["Chain Mail (เกราะโซ่)",16],
+        ["Splint Mail (เกราะแผ่นเหล็ก)",17],
+        ["Plate Armor (เกราะเต็มตัว)",18]
+    ],
+    Guardian:[
+        ["Chain Mail + Shield (เกราะโซ่+โล่)",16],
+        ["Splint + Shield (เกราะแผ่น+โล่)",17],
+        ["Plate + Aegis Shield (เกราะเต็มตัว+โล่เอจิส)",18]
+    ],
+    DragonSlayer:[
+        ["Scale Mail (เกราะเกล็ด)",14],
+        ["Half-Plate (เกราะครึ่งตัว)",15],
+        ["Dragonscale Mail (เกราะเกล็ดมังกร)",16]
+    ],
+    Samurai:[
+        ["Leather Lamellar (เกราะหนังเกล็ด)",13],
+        ["Lamellar (เกราะเกล็ดซามุไร)",14],
+        ["Master Lamellar (เกราะเกล็ดปรมาจารย์)",15]
+    ],
+    Berserker:[
+        ["Warpaint Hide (หนังสัตว์ทาสี)",10],
+        ["Beast Hide (หนังอสูร)",11],
+        ["Primal Hide (หนังโบราณ)",12]
+    ],
+
+    Mage:[
+        ["Robes (ชุดคลุมเวท)",10],
+        ["Enchanted Robes (ชุดคลุมมนตรา)",11],
+        ["Archmage Robes (ชุดคลุมจอมเวท)",12]
+    ],
+    Elementalist:[
+        ["Apprentice Mantle (ผ้าคลุมศิษย์ธาตุ)",12],
+        ["Mage Armor (เกราะเวท)",13],
+        ["Elemental Mantle (ผ้าคลุมธาตุ)",14]
+    ],
+    Necromancer:[
+        ["Bone Vest (เสื้อกระดูก)",11],
+        ["Bone Armor (เกราะกระดูก)",12],
+        ["Lich Mantle (ผ้าคลุมลิช)",13]
+    ],
+    Spellblade:[
+        ["Chain Shirt (เสื้อโซ่)",13],
+        ["Arcane Breastplate (เกราะอกเวท)",14],
+        ["Runed Plate (เกราะจารึกรูน)",15]
+    ],
+    Priest:[
+        ["Scale + Shield (เกราะเกล็ด+โล่)",12],
+        ["Blessed Scale + Shield (เกราะเกล็ดพร+โล่)",13],
+        ["Sun Plate + Shield (เกราะสุริยัน+โล่)",14]
+    ],
+
+    Rogue:[
+        ["Leather (เกราะหนัง)",11],
+        ["Studded Leather (หนังหุ้มหมุด)",12],
+        ["Shadow Leather (หนังเงา)",13]
+    ],
+    Assassin:[
+        ["Studded Leather (หนังหุ้มหมุด)",12],
+        ["Nightweave (ผ้าราตรี)",13],
+        ["Umbral Leather (หนังอัมพร)",14]
+    ],
+    Trickster:[
+        ["Trickster Coat (เสื้อนักเล่นกล)",11],
+        ["Cloak of Tricks (เสื้อคลุมลวงตา)",12],
+        ["Mirage Cloak (เสื้อคลุมมายา)",13]
+    ],
+    Archer:[
+        ["Light Leather (หนังเบา)",11],
+        ["Ranger Leather (หนังเรนเจอร์)",12],
+        ["Windrunner Leather (หนังพายุ)",13]
+    ],
+    Ninja:[
+        ["Shadow Garb (ชุดเงา)",10],
+        ["Shinobi Garb (ชุดชิโนบิ)",11],
+        ["Night Shroud (ผ้าคลุมราตรี)",12]
+    ]
+
+};
+
+/* ab = Ability ที่ใช้ทอยโจมตี (ใช้ค่าสูงสุดถ้ามีหลายตัว), acc = โบนัสความแม่นยำประจำสาย */
+const WEAPONS={
+
+    Warrior:{ab:["STR"],acc:0,names:[
+        "Iron Sword (ดาบเหล็ก)",
+        "Steel Longsword (ดาบยาวเหล็กกล้า)",
+        "Runed Greatsword (ดาบใหญ่จารึกรูน)"
+    ]},
+    Berserker:{ab:["STR"],acc:0,names:[
+        "Hand Axe (ขวานมือ)",
+        "Battle Axe (ขวานศึก)",
+        "Bloodthirst Greataxe (ขวานใหญ่กระหายเลือด)"
+    ]},
+    Guardian:{ab:["STR","CON"],acc:0,names:[
+        "Mace (กระบองเหล็ก)",
+        "Warhammer (ค้อนศึก)",
+        "Bulwark Maul (ค้อนยักษ์ปราการ)"
+    ]},
+    Samurai:{ab:["STR","DEX"],acc:0,names:[
+        "Iron Katana (คาตานะเหล็ก)",
+        "Steel Katana (คาตานะเหล็กกล้า)",
+        "Masterwork Katana (คาตานะปรมาจารย์)"
+    ]},
+    DragonSlayer:{ab:["STR"],acc:0,names:[
+        "Broadsword (ดาบกว้าง)",
+        "Dragonbone Blade (ดาบกระดูกมังกร)",
+        "Dragonslayer Greatsword (ดาบใหญ่สังหารมังกร)"
+    ]},
+
+    Mage:{ab:["INT"],acc:0,names:[
+        "Wooden Wand (คทาไม้)",
+        "Crystal Staff (ไม้เท้าคริสตัล)",
+        "Arcane Staff (ไม้เท้าอาคม)"
+    ]},
+    Elementalist:{ab:["INT"],acc:0,names:[
+        "Ember Staff (ไม้เท้าถ่านไฟ)",
+        "Storm Staff (ไม้เท้าพายุ)",
+        "Elemental Scepter (คทาธาตุ)"
+    ]},
+    Necromancer:{ab:["INT","WIS"],acc:0,names:[
+        "Bone Wand (คทากระดูก)",
+        "Skull Staff (ไม้เท้ากะโหลก)",
+        "Lich Scepter (คทาลิช)"
+    ]},
+    Spellblade:{ab:["STR","INT"],acc:0,names:[
+        "Rune Sword (ดาบรูน)",
+        "Arcane Blade (ดาบอาคม)",
+        "Astral Blade (ดาบดารา)"
+    ]},
+    Priest:{ab:["WIS","CHA"],acc:0,names:[
+        "Blessed Mace (กระบองอวยพร)",
+        "Holy Staff (ไม้เท้าศักดิ์สิทธิ์)",
+        "Sun Scepter (คทาสุริยัน)"
+    ]},
+
+    Rogue:{ab:["DEX"],acc:0,names:[
+        "Dagger (กริช)",
+        "Twin Daggers (กริชคู่)",
+        "Shadow Fangs (เขี้ยวเงา)"
+    ]},
+    Assassin:{ab:["DEX"],acc:0,names:[
+        "Stiletto (มีดสั้นเรียว)",
+        "Poison Fang (เขี้ยวพิษ)",
+        "Nightfall Blade (ใบมีดสนธยา)"
+    ]},
+    Trickster:{ab:["DEX","CHA"],acc:0,names:[
+        "Rapier (เรเปียร์)",
+        "Trickster's Rapier (เรเปียร์นักเล่นกล)",
+        "Mirage Rapier (เรเปียร์มายา)"
+    ]},
+    Archer:{ab:["DEX"],acc:2,names:[
+        "Shortbow (ธนูสั้น)",
+        "Longbow (ธนูยาว)",
+        "Heavenly Longbow (ธนูยาวสวรรค์)"
+    ]},
+    Ninja:{ab:["DEX"],acc:0,names:[
+        "Tanto (ทันโต)",
+        "Kunai Set (ชุดคุไน)",
+        "Shadow Katana (คาตานะเงา)"
+    ]}
+
+};
+
+
+function equipKey(){
+
+    return selectedSubclass || currentClassId;
+
+}
+
+
+function maxUnlockedTier(){
+
+    let t=0;
+
+    TIER_LEVELS.forEach((lv,i)=>{
+
+        if(charState.level>=lv) t=i;
+
+    });
+
+    return t;
+
+}
+
+
+function getACBreakdown(tier){
+
+    if(tier===undefined) tier=charState.armorTier||0;
+
+    const a=getArmor();
+
+    const row=(ARMOR_TIERS[equipKey()]||[])[tier];
+
+    const name=row?row[0]:a.name;
+
+    const base=row?row[1]:a.base;
+
+    const dexMod=calcModVal(charState.stats.DEX);
+
+    let dexPart=dexMod;
+
+    if(a.dexCap===0) dexPart=0;
+    else if(typeof a.dexCap==="number")
+        dexPart=Math.min(dexMod,a.dexCap);
+
+    const parts=[base+" ฐาน"];
+
+    let total=base+dexPart;
+
+    if(a.dexCap===0)
+        parts.push("ไม่บวก DEX");
+    else
+        parts.push(
+            (dexPart>=0?"+":"")+dexPart+" DEX"+
+            (typeof a.dexCap==="number"?" (สูงสุด +"+a.dexCap+")":"")
+        );
+
+    if(a.extra){
+
+        let m=calcModVal(charState.stats[a.extra]);
+
+        if(typeof a.extraCap==="number")
+            m=Math.min(m,a.extraCap);
+
+        total+=m;
+
+        parts.push(
+            (m>=0?"+":"")+m+" "+a.extra+
+            (typeof a.extraCap==="number"?" (สูงสุด +"+a.extraCap+")":"")
+        );
+
+    }
+
+    if(a.shield){
+
+        total+=a.shield;
+
+        parts.push("+"+a.shield+" โล่");
+
+    }
+
+    if(a.bonus){
+
+        total+=a.bonus;
+
+        parts.push("+"+a.bonus+" โบนัส");
+
+    }
+
+    return {total,parts,name};
+
+}
+
+
+function calcAC(){
+
+    return getACBreakdown().total;
+
+}
+
+
+function getATKBreakdown(tier){
+
+    if(tier===undefined) tier=charState.weaponTier||0;
+
+    const w=WEAPONS[equipKey()];
+
+    let best=-99;
+
+    let bestAb=w.ab[0];
+
+    w.ab.forEach(ab=>{
+
+        const m=calcModVal(charState.stats[ab]);
+
+        if(m>best){
+
+            best=m;
+
+            bestAb=ab;
+
+        }
+
+    });
+
+    const prof=getProficiencyBonus();
+
+    const tb=WEAPON_TIER_BONUS[tier];
+
+    let total=prof+best+tb+(w.acc||0);
+
+    const parts=[
+
+        "+"+prof+" PROF",
+
+        (best>=0?"+":"")+best+" "+bestAb,
+
+        "+"+tb+" อาวุธ"
+
+    ];
+
+    if(w.acc) parts.push("+"+w.acc+" แม่นยำ");
+
+    return {total,parts,name:w.names[tier],abilities:w.ab,usedAbility:bestAb};
+
+}
+
+
+function calcATK(){
+
+    return getATKBreakdown().total;
+
+}
+
+
+function fmtBonus(n){
+
+    return (n>=0?"+":"")+n;
+
+}
+
+
+/* =========================================================
+   EQUIPMENT UI
+========================================================= */
+
+function setTier(slot,i){
+
+    if(i>maxUnlockedTier()) return;
+
+    if(slot==="armor") charState.armorTier=i;
+    else charState.weaponTier=i;
+
+    renderAll();
+
+}
+
+
+function renderEquipment(){
+
+    const box=document.getElementById("equipList");
+
+    if(!box) return;
+
+    const maxT=maxUnlockedTier();
+
+    const slots=[
+
+        {
+            id:"armor",
+            label:"🛡️ เกราะ (Armor)",
+            tier:charState.armorTier,
+            info:i=>"AC "+getACBreakdown(i).total,
+            name:i=>getACBreakdown(i).name
+        },
+
+        {
+            id:"weapon",
+            label:"⚔️ อาวุธ (Weapon)"+
+                (
+                    WEAPONS[equipKey()].ab.length>1
+                    ?" — ใช้ได้: "+WEAPONS[equipKey()].ab.join(" หรือ ")
+                    :""
+                ),
+            tier:charState.weaponTier,
+            info:i=>"ATK "+fmtBonus(getATKBreakdown(i).total),
+            name:i=>getATKBreakdown(i).name
+        }
+
+    ];
+
+    box.innerHTML=slots.map(sl=>`
+
+        <div class="equip-slot">
+
+            <div class="equip-label">
+                ${sl.label}
+            </div>
+
+            <div class="equip-current">
+                ${sl.name(sl.tier)}
+            </div>
+
+            <div class="tier-row">
+
+                ${[0,1,2].map(i=>{
+
+                    const locked=i>maxT;
+
+                    return `
+
+                    <button
+                        class="tier-btn ${sl.tier===i?"active":""} ${locked?"locked":""}"
+                        ${locked?"disabled":""}
+                        onclick="setTier('${sl.id}',${i})"
+                    >
+                        <b>${TIER_LABELS[i]}</b>
+                        <span>${
+                            locked
+                            ?"🔒 Lv."+TIER_LEVELS[i]
+                            :sl.info(i)
+                        }</span>
+                    </button>
+
+                    `;
+
+                }).join("")}
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   PAGE SWITCH
+========================================================= */
+
+function switchPage(pageId,button){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(
+            p=>p.classList.remove("active")
+        );
+
+    document
+        .getElementById(pageId)
+        .classList.add("active");
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(
+            b=>b.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+}
+
+
+/* =========================================================
+   CLASS SELECTOR
+========================================================= */
+
+function renderClassSelector(){
+
+    const box=
+        document.getElementById(
+            "classSelector"
+        );
+
+    box.innerHTML="";
+
+    CLASSES_DATA.forEach(c=>{
+
+        const button=
+            document.createElement("button");
+
+        button.className=
+            "class-btn "+
+            (
+                c.id===currentClassId
+                ?"active"
+                :""
+            );
+
+        button.innerHTML=`
+
+            <span class="class-icon">
+                ${pixIcon(c.icon)}
+            </span>
+
+            <div class="class-name">
+                ${c.th}
+            </div>
+
+            <div class="class-role">
+                ${c.role}
+            </div>
+
+        `;
+
+        button.onclick=()=>{
+            selectClass(c.id);
+        };
+
+        box.appendChild(button);
+
+    });
+
+}
+
+
+/* =========================================================
+   SELECT CLASS
+========================================================= */
+
+function selectClass(id){
+
+    currentClassId=id;
+
+    const c=getClass();
+
+    charState.level=1;
+
+    charState.points=0;
+
+    charState.maxSP=baseMaxSP();
+
+    charState.sp=charState.maxSP;
+
+    charState.stats=baseStatsFor(c);
+
+    selectedSubclass=null;
+
+    renderAll();
+
+}
+
+
+/* =========================================================
+   LEVEL UP
+========================================================= */
+
+const STAT_POINT_LEVELS=[2,4,6,8,10];
+
+const STAT_POINTS_PER_MILESTONE=2;
+
+const STAT_MAX=20;
+
+function levelUp(){
+
+    if(charState.level>=10){
+
+        alert("ถึง Level สูงสุดแล้ว");
+
+        return;
+    }
+
+    charState.level++;
+
+    /*
+       ได้ Stat Point เฉพาะ Lv.2,4,6,8,10
+       ครั้งละ 2 แต้ม
+    */
+
+    if(STAT_POINT_LEVELS.includes(charState.level)){
+
+        charState.points+=pointsPerMilestone();
+
+    }
+
+    /*
+       SP กลับเต็มเมื่อ Level Up
+    */
+
+    charState.sp=charState.maxSP;
+
+    renderAll();
+
+}
+
+
+/* =========================================================
+   LEVEL DOWN
+========================================================= */
+
+function levelDown(){
+
+    if(charState.level<=1)
+        return;
+
+    /*
+       ถ้าลดต่ำกว่า Level 5
+       จะยกเลิก Subclass
+    */
+
+    const leavingLevel=charState.level;
+
+    charState.level--;
+
+    if(STAT_POINT_LEVELS.includes(leavingLevel)){
+
+        charState.points=
+            Math.max(
+                0,
+                charState.points-pointsPerMilestone()
+            );
+
+    }
+
+    if(charState.level<5){
+
+        selectedSubclass=null;
+
+    }
+
+    renderAll();
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetLevel(){
+
+    const c=getClass();
+
+    charState.level=1;
+
+    charState.points=0;
+
+    charState.maxSP=baseMaxSP();
+
+    charState.sp=charState.maxSP;
+
+    charState.stats=baseStatsFor(c);
+
+    selectedSubclass=null;
+
+    renderAll();
+
+}
+
+
+/* =========================================================
+   CHANGE STAT
+========================================================= */
+
+function addStat(stat){
+
+    if(charState.points<=0)
+        return;
+
+    if(charState.stats[stat]>=STAT_MAX){
+
+        alert("ค่าสเตตัสสูงสุดคือ 20");
+
+        return;
+    }
+
+    charState.stats[stat]++;
+
+    charState.points--;
+
+    renderAll();
+
+}
+
+
+function subStat(stat){
+
+    const base=
+        baseStatsFor(getClass())[stat];
+
+    if(
+        charState.stats[stat]
+        <=base
+    ){
+
+        return;
+    }
+
+    charState.stats[stat]--;
+
+    charState.points++;
+
+    renderAll();
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function renderStats(){
+
+    const box=
+        document.getElementById(
+            "statsGrid"
+        );
+
+    box.innerHTML="";
+
+    Object
+        .entries(charState.stats)
+        .forEach(
+            ([stat,value])=>{
+
+                const div=
+                    document.createElement("div");
+
+                div.className="stat";
+
+                div.innerHTML=`
+
+                    <div class="stat-name">
+                        ${stat}
+                    </div>
+
+                    <div>
+
+        <div class="stat-value">
+                            ${value}${value>=STAT_MAX?' <span style="color:var(--accent-gold); font-size:9px;">MAX</span>':''}
+                        </div>
+
+                        <div class="mod">
+                            ${calcModStr(value)}${getRace().bonus[stat]?`<span class="stat-race">+${getRace().bonus[stat]}</span>`:""}
+                        </div>
+
+                    </div>
+
+                    <div class="stat-buttons">
+
+                        <button
+                            onclick="addStat('${stat}')"
+                            ${value>=STAT_MAX?'style="opacity:.35; cursor:not-allowed;"':''}
+                        >
+                            +
+                        </button>
+
+                        <button
+                            onclick="subStat('${stat}')"
+                        >
+                            −
+                        </button>
+
+                    </div>
+
+                `;
+
+                box.appendChild(div);
+
+            }
+        );
+
+    document
+        .querySelector("#statPoints strong")
+        .textContent=
+        charState.points;
+
+}
+
+
+/* =========================================================
+   SAVING THROWS
+========================================================= */
+
+function renderSavingThrows(){
+
+    const c=getClass();
+
+    const box=
+        document.getElementById(
+            "saveGrid"
+        );
+
+    box.innerHTML="";
+
+    const stats=[
+        "STR",
+        "DEX",
+        "CON",
+        "INT",
+        "WIS",
+        "CHA"
+    ];
+
+    stats.forEach(stat=>{
+
+        const proficient=
+            c.saves.includes(stat);
+
+        let value=
+            calcModVal(
+                charState.stats[stat]
+            );
+
+        if(proficient){
+
+            value+=
+                getProficiencyBonus();
+
+        }
+
+        const div=
+            document.createElement("div");
+
+        div.className=
+            "save-row "+
+            (
+                proficient
+                ?"proficient"
+                :""
+            );
+
+        div.innerHTML=`
+
+            <div class="save-left">
+
+                <span
+                    class="save-proficient"
+                ></span>
+
+                <span class="save-name">
+                    ${stat}
+                </span>
+
+            </div>
+
+            <span class="save-value">
+                ${value>=0?"+":""}${value}
+            </span>
+
+        `;
+
+        box.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================================
+   D&D SKILL FILTER
+========================================================= */
+
+function renderSkillFilter(){
+
+    const c=getClass();
+
+    const box=
+        document.getElementById(
+            "skillFilter"
+        );
+
+    const filters=[
+        ["all","ทั้งหมด"],
+        ["prof","⭐ ถนัด"],
+        ["STR","STR"],
+        ["DEX","DEX"],
+        ["INT","INT"],
+        ["WIS","WIS"],
+        ["CHA","CHA"]
+    ];
+
+    box.innerHTML="";
+
+    filters.forEach(
+        ([id,label])=>{
+
+            const button=
+                document.createElement("button");
+
+            button.className=
+                "filter-btn "+
+                (
+                    currentSkillFilter===id
+                    ?"active"
+                    :""
+                );
+
+            button.textContent=label;
+
+            button.onclick=()=>{
+
+                currentSkillFilter=id;
+
+                renderSkillFilter();
+                renderDndSkills();
+
+            };
+
+            box.appendChild(button);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   D&D SKILLS
+========================================================= */
+
+function renderDndSkills(){
+
+    const c=getClass();
+
+    const box=
+        document.getElementById(
+            "dndSkills"
+        );
+
+    box.innerHTML="";
+
+    let shown=0;
+
+    DND_SKILLS.forEach(
+        ([name,ability,thaiName])=>{
+
+            const proficient=
+                c.skillsProficient
+                .includes(name);
+
+            if(
+                currentSkillFilter==="prof" &&
+                !proficient
+            ){
+
+                return;
+
+            }
+
+            if(
+                currentSkillFilter!=="all" &&
+                currentSkillFilter!=="prof" &&
+                currentSkillFilter!==ability
+            ){
+
+                return;
+
+            }
+
+            shown++;
+
+            let value=
+                calcModVal(
+                    charState.stats[ability]
+                );
+
+            if(proficient){
+
+                value+=
+                    getProficiencyBonus();
+
+            }
+
+            const div=
+                document.createElement("div");
+
+            div.className=
+                "dnd-skill "+
+                (
+                    proficient
+                    ?"proficient"
+                    :""
+                );
+
+            div.innerHTML=`
+
+                <span
+                    class="dnd-skill-dot"
+                ></span>
+
+                <div>
+
+                    <div class="dnd-skill-name">
+                        ${name}
+                        <span style="color:#6d7690; font-weight:400;">
+                            (${thaiName})
+                        </span>
+                    </div>
+
+                    <div class="dnd-skill-ability">
+                        ${ability}
+                        ${proficient?" · ถนัด":""}
+                    </div>
+
+                </div>
+
+                <div class="dnd-skill-value">
+                    ${value>=0?"+":""}${value}
+                </div>
+
+            `;
+
+            box.appendChild(div);
+
+        }
+    );
+
+    document
+        .getElementById("skillCount")
+        .textContent=
+        shown+"/18";
+
+}
+
+
+/* =========================================================
+   SUBCLASS
+========================================================= */
+
+function selectSubclass(id){
+
+    if(charState.level<5){
+
+        alert(
+            "ต้องมี Level 5 ก่อนจึงจะเลือก Subclass ได้"
+        );
+
+        return;
+    }
+
+    selectedSubclass=id;
+
+    renderAll();
+
+}
+
+
+function renderSubclasses(){
+
+    const c=getClass();
+
+    const box=
+        document.getElementById(
+            "subclassList"
+        );
+
+    box.innerHTML="";
+
+    c.subclasses.forEach(sub=>{
+
+        const locked=
+            charState.level<5;
+
+        const button=
+            document.createElement("button");
+
+        button.className=
+            "subclass-btn "+
+            (
+                selectedSubclass===sub.id
+                ?"selected "
+                :""
+            )+
+            (
+                locked
+                ?"locked"
+                :""
+            );
+
+        button.innerHTML=`
+
+            <strong>
+                ${pixIcon(sub.icon)}
+                ${sub.name}
+            </strong>
+
+            <small>
+                ${
+                    locked
+                    ?"🔒 Required Level 5"
+                    :"✦ "+sub.passive.name
+                }
+            </small>
+
+        `;
+
+        button.onclick=()=>{
+
+            if(!locked){
+
+                selectSubclass(
+                    sub.id
+                );
+
+            }
+
+        };
+
+        box.appendChild(button);
+
+    });
+
+}
+
+
+/* =========================================================
+   PASSIVE
+========================================================= */
+
+function renderPassive(){
+
+    const c=getClass();
+
+    const box=
+        document.getElementById(
+            "classPassive"
+        );
+
+    let html=`
+
+        <b>
+            ${c.passive.name}
+        </b>
+
+        <br>
+
+        ${c.passive.desc}
+
+    `;
+
+    const race=getRace();
+
+    html+=`
+
+        <div class="passive-race">
+
+            <b>
+                ${race.icon}
+                RACE PASSIVE —
+                ${race.passive.name}
+            </b>
+
+            <br>
+
+            ${race.passive.desc}
+
+            ${race.auto?"<small>✓ คำนวณให้อัตโนมัติ</small>":""}
+
+        </div>
+
+    `;
+
+    if(selectedSubclass){
+
+        const sub=
+            c.subclasses.find(
+                s=>s.id===selectedSubclass
+            );
+
+        if(sub){
+
+            html+=`
+
+                <div
+                    class="passive-subclass"
+                >
+
+                    <b>
+                        ${pixIcon(sub.icon)}
+                        SUBCLASS PASSIVE —
+                        ${sub.passive.name}
+                    </b>
+
+                    <br>
+
+                    ${sub.passive.desc}
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+    box.innerHTML=html;
+
+}
+
+
+/* =========================================================
+   CREATE SKILL CARD
+========================================================= */
+
+function createSkillCard(
+    skill,
+    locked=false,
+    subclassSkill=false
+){
+
+    const div=
+        document.createElement("div");
+
+    div.className=
+        "skill-slot "+
+        (
+            locked
+            ?"locked "
+            :""
+        )+
+        (
+            subclassSkill
+            ?"subclass-skill"
+            :""
+        );
+
+    div.innerHTML=`
+
+        <div class="skill-top">
+
+            <div class="skill-icon">
+                ${pixIcon(skill.icon)}
+            </div>
+
+            <div class="skill-info">
+
+                <div class="skill-name">
+                    ${skill.name}
+                </div>
+
+                <div class="skill-type">
+                    ${skill.type}
+                    ${
+                        skill.upgradedBy
+                        ?`<span class="upgrade-badge">✦ ปรับสำหรับ ${skill.upgradedBy}</span>`
+                        :""
+                    }
+                </div>
+
+            </div>
+
+            <div class="skill-cost">
+                ⚡ ${
+                    effectiveCost(skill)!==skill.cost
+                    ?`<s style="opacity:.55;">${skill.cost}</s> ${effectiveCost(skill)}`
+                    :effectiveCost(skill)
+                } SP
+            </div>
+
+        </div>
+
+
+        <div class="skill-body">
+
+            <div class="skill-effect">
+                ${skill.effect}
+            </div>
+
+            <div class="skill-damage-line">
+                <span>💥 Damage:</span>
+                <span class="dmg-value">${skill.damage}</span>
+            </div>
+
+            <div class="skill-desc-preview">
+                📜 ${skill.desc}
+            </div>
+
+            <div class="skill-tags">
+
+                <span class="tag level">
+                    LV.${skill.reqLv}
+                </span>
+
+                <span class="tag modifier">
+                    ${skill.modifier}
+                </span>
+
+                <span class="tag damage">
+                    ${skill.damage}
+                </span>
+
+                <span class="tag range">
+                    📏 ${skill.range}
+                </span>
+
+            </div>
+
+        </div>
+
+        ${
+            locked
+            ?
+            `
+            <div class="lock-overlay">
+
+                🔒
+                ต้องการ Level
+                ${skill.reqLv}
+
+            </div>
+            `
+            :
+            ""
+        }
+
+    `;
+
+    div.onclick=()=>{
+        showSkill(skill);
+    };
+
+    return div;
+
+}
+
+
+/* =========================================================
+   BASE SKILLS
+========================================================= */
+
+function renderBaseSkills(){
+
+    const c=getClass();
+
+    const box=
+        document.getElementById(
+            "baseSkills"
+        );
+
+    box.innerHTML="";
+
+    let subName=null;
+
+    let upgrades={};
+
+    if(selectedSubclass){
+
+        const sub=c.subclasses.find(
+            x=>x.id===selectedSubclass
+        );
+
+        if(sub){
+
+            subName=sub.name;
+
+            upgrades=
+                BASE_SKILL_UPGRADES[selectedSubclass]||{};
+
+        }
+
+    }
+
+    c.skills.forEach(skill=>{
+
+        const locked=
+            charState.level<skill.reqLv;
+
+        const upgrade=upgrades[skill.id];
+
+        const finalSkill=
+            upgrade
+            ?{
+                ...skill,
+                ...upgrade,
+                upgradedBy:subName
+            }
+            :skill;
+
+        box.appendChild(
+
+            createSkillCard(
+                finalSkill,
+                locked,
+                false
+            )
+
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   SUBCLASS SKILLS
+========================================================= */
+
+function renderSubclassSkills(){
+
+    const box=
+        document.getElementById(
+            "subclassSkills"
+        );
+
+    box.innerHTML="";
+
+    const c=getClass();
+
+    if(!selectedSubclass){
+
+        box.innerHTML=`
+
+            <div class="empty-tree">
+
+                🔒
+
+                <br><br>
+
+                ถึง Level 5
+                แล้วเลือก Subclass
+                เพื่อปลดล็อก Skill Path
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    const sub=
+        c.subclasses.find(
+            s=>s.id===selectedSubclass
+        );
+
+    if(!sub)
+        return;
+
+    sub.skills.forEach(skill=>{
+
+        const locked=
+            charState.level<skill.reqLv;
+
+        box.appendChild(
+
+            createSkillCard(
+                skill,
+                locked,
+                true
+            )
+
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   CHARACTER INFO
+========================================================= */
+
+function renderCharacter(){
+
+    const c=getClass();
+
+    const hp=calcMaxHP();
+
+    document
+        .getElementById("avatar")
+        .innerHTML=pixIcon(c.icon);
+
+    document
+        .getElementById("levelText")
+        .textContent=
+        "LEVEL "+charState.level;
+
+    document
+        .getElementById("ac")
+        .textContent=
+        calcAC();
+
+    const acb=getACBreakdown();
+
+    document
+        .getElementById("acDetail")
+        .innerHTML=
+        "🛡️ <b>"+acb.name+"</b><br>"+
+        "<span>"+acb.parts.join(" · ")+" = "+acb.total+"</span>";
+
+    const atk=getATKBreakdown();
+
+    document
+        .getElementById("atk")
+        .textContent=
+        fmtBonus(atk.total);
+
+    const abilityNote=
+        atk.abilities.length>1
+        ?"ใช้ได้: "+atk.abilities.join(" หรือ ")+
+          " (ระบบเลือกค่าที่สูงกว่าให้ ตอนนี้คือ "+atk.usedAbility+")<br>"
+        :"";
+
+    document
+        .getElementById("atkDetail")
+        .innerHTML=
+        "⚔️ <b>"+atk.name+"</b><br>"+
+        abilityNote+
+        "<span>"+atk.parts.join(" · ")+" = "+fmtBonus(atk.total)+"</span>";
+
+    document
+        .getElementById("speed")
+        .textContent=
+        (c.speed+(currentRaceId==="Lizardfolk"?5:0))+" ft";
+
+    document
+        .getElementById("prof")
+        .textContent=
+        "+"+getProficiencyBonus();
+
+    document
+        .getElementById("hpText")
+        .textContent=
+        hp+" / "+hp;
+
+    document
+        .getElementById("hpFill")
+        .style.width="100%";
+
+    document
+        .getElementById("spDisplay")
+        .textContent=
+        charState.sp+
+        " / "+
+        charState.maxSP;
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function showSkill(skill){
+
+    document
+        .getElementById("detailIcon")
+        .innerHTML=pixIcon(skill.icon);
+
+    document
+        .getElementById("detailName")
+        .textContent=
+        skill.name;
+
+    document
+        .getElementById("detailSub")
+        .textContent=
+        skill.type+
+        (
+            skill.upgradedBy
+            ?" · ✦ ปรับสำหรับ "+skill.upgradedBy
+            :""
+        );
+
+    document
+        .getElementById("detailType")
+        .textContent=
+        skill.type;
+
+    document
+        .getElementById("detailLevel")
+        .textContent=
+        "Level "+skill.reqLv;
+
+    document
+        .getElementById("detailSP")
+        .textContent=
+        effectiveCost(skill)!==skill.cost
+        ?skill.cost+" → "+effectiveCost(skill)+" SP (Arcane Economy)"
+        :skill.cost+" SP";
+
+    document
+        .getElementById("detailRange")
+        .textContent=
+        skill.range;
+
+    document
+        .getElementById("detailMod")
+        .textContent=
+        skill.modifier;
+
+    document
+        .getElementById("detailDamage")
+        .textContent=
+        skill.damage;
+
+    document
+        .getElementById("detailEffect")
+        .textContent=
+        skill.effect;
+
+    document
+        .getElementById("detailDesc")
+        .textContent=
+        skill.desc;
+
+    document
+        .getElementById("modal")
+        .classList.add("show");
+
+}
+
+
+function closeModal(event){
+
+    if(
+        event &&
+        event.target.id!=="modal"
+    ){
+
+        return;
+
+    }
+
+    document
+        .getElementById("modal")
+        .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   RENDER ALL
+========================================================= */
+
+function renderAll(){
+
+    renderClassSelector();
+
+    renderRace();
+
+    charState.armorTier=Math.min(charState.armorTier||0,maxUnlockedTier());
+
+    charState.weaponTier=Math.min(charState.weaponTier||0,maxUnlockedTier());
+
+    renderCharacter();
+
+    renderEquipment();
+
+    renderStats();
+
+    renderSavingThrows();
+
+    renderSkillFilter();
+
+    renderDndSkills();
+
+    renderSubclasses();
+
+    renderPassive();
+
+    renderBaseSkills();
+
+    renderSubclassSkills();
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+charState.stats=baseStatsFor(CLASSES_DATA[0]);
+
+renderAll();
+
+</script>
+
+
+<script>
+/* collapsible panels + ESC to close modal */
+document.querySelectorAll(".panel[data-fold]").forEach(p=>{
+    const t=p.querySelector(".panel-title");
+    const sync=()=>t.setAttribute("aria-expanded",!p.classList.contains("folded"));
+    const toggle=()=>{p.classList.toggle("folded");sync();};
+    t.tabIndex=0;t.setAttribute("role","button");
+    t.onclick=toggle;
+    t.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle();}};
+    if(p.dataset.fold==="closed"&&innerWidth<=1100)p.classList.add("folded");
+    sync();
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+</script>
+
+</body>
+</html>
+
+{
+  "name": "Fantasy Pixel RPG Character Sheet",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "description": "Thai pixel RPG character sheet for D&D-style games in Owlbear Rodeo.",
+  "icon": "/icon.svg",
+  "author": "Fantasy Pixel RPG",
+  "action": {
+    "title": "Character Sheet",
+    "icon": "/icon.svg",
+    "popover": "/index.html",
+    "width": 1100,
+    "height": 800
+  }
+}
+
+FANTASY PIXEL RPG — OWLBEAR RODEO EXTENSION
+
+This is the first standalone Owlbear Rodeo extension package.
+The original character sheet is kept as index.html so its existing UI and RPG systems remain intact.
+
+Files:
+- manifest.json  Owlbear extension manifest
+- index.html     Original Fantasy Pixel RPG Character Sheet
+- icon.svg       Extension icon
+
+INSTALL
+1. Host this folder on a public HTTPS web host.
+2. In Owlbear Rodeo, add the extension using the URL of manifest.json.
+3. Enable the extension for the room.
+4. Click Character Sheet in the Owlbear extension area.
+
+This version is a UI-first integration. It does not yet synchronize character data with Owlbear tokens/scenes.
